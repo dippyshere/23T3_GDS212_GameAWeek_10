@@ -1,16 +1,15 @@
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class IntroController : MonoBehaviour
 {
+    public TMP_Text[] textElements;
     public float zoomSpeed = 1f;
     public float maxZoom = 2f;
-    public float zoomDuration = 5f; // Adjust as needed
-
-    public Text[] textElements;
-    public float textDuration = 3f; // Adjust as needed
+    public float zoomDuration = 5f;
+    public float textDuration = 3f;
 
     private Camera mainCamera;
     private RectTransform imageTransform;
@@ -18,6 +17,8 @@ public class IntroController : MonoBehaviour
 
     void Start()
     {
+        ActivateTextElements();
+
         mainCamera = Camera.main;
         imageTransform = GetComponentInChildren<Image>().rectTransform;
 
@@ -36,6 +37,14 @@ public class IntroController : MonoBehaviour
 
             // Clamp zoom to a maximum value
             mainCamera.fieldOfView = Mathf.Clamp(newFieldOfView, maxZoom, 60f);
+        }
+    }
+
+    void ActivateTextElements()
+    {
+        foreach (TMP_Text textElement in textElements)
+        {
+            textElement.enabled = true;
         }
     }
 

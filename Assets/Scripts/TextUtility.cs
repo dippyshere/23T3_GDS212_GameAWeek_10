@@ -1,50 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class TextUtility : MonoBehaviour
 {
-    public Text[] textElements;
-    public float textDuration = 3f; // Adjust as needed
-    private int textIndex = 0;
+    public TextGroup[] textGroups;
+    private int currentGroupIndex = 0;
 
-    private void Start()
+    void Start()
     {
-        for (int i = 0; i < textElements.Length; i++)
-        {
-            HideText(i);
-        }
-
-        StartCoroutine(ShowTextWithDelay(textIndex));
+        ActivateTextGroup(currentGroupIndex);
     }
 
-    private IEnumerator ShowTextWithDelay(int index)
+    public void NextGroup()
     {
-        yield return new WaitForSeconds(textDuration);
+        // Hide the current group
+        DeactivateTextGroup(currentGroupIndex);
 
-        HideText(index);
-        textIndex++;
+        // Move to the next group
+        currentGroupIndex++;
 
-        if (textIndex < textElements.Length)
+        // If there are more groups, activate the next one
+        if (currentGroupIndex < textGroups.Length)
         {
-            StartCoroutine(ShowTextWithDelay(textIndex));
+            ActivateTextGroup(currentGroupIndex);
         }
-    }
-
-    private void ShowText(int index)
-    {
-        if (index >= 0 && index < textElements.Length)
+        else
         {
-            textElements[index].enabled = true;
+            // If there are no more groups, you can perform any action or transition to the next scene.
+            Debug.Log("End of text groups");
         }
     }
 
-    private void HideText(int index)
+    void ActivateTextGroup(int groupIndex)
     {
-        if (index >= 0 && index < textElements.Length)
+        TextGroup textGroup = textGroups[groupIndex];
+        foreach (TMP_Text textElement in textGroup.textElements)
         {
-            textElements[index].enabled = false;
+            textElement.gameObject.SetActive(true);
         }
     }
+
+    void DeactivateTextGroup(int groupIndex)
+    {
+        TextGroup textGroup = textGroups[groupIndex];
+        foreach (TMP_Text textElement in textGroup.textElements)
+        {
+            textElement.gameObject.SetActive(false);
+        }
+    }
+
+    // Method to handle button click
+    public void OnButtonClick()
+    {
+        NextGroup();
+    }
+}
+
+[System.Serializable]
+public class TextGroup
+{
+    public TMP_Text[] textElements;
 }
