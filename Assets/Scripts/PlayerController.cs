@@ -12,13 +12,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 6f;
     [SerializeField] private float walkMultiplier = 1f;
     [SerializeField] private float runMultiplier = 1.3f;
-    [SerializeField] private float runVisualMultiplier = 0.1f;
+    [SerializeField] private float walkVisualMultiplier = 0.4f;
+    [SerializeField] private float runVisualMultiplier = 0.08f;
     [SerializeField] private float jumpForce = 15f;
     [Header("References")]
-    //[SerializeField] private Animator animator;
+    [SerializeField] private Animator animator;
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform visualTransform;
     [SerializeField] private TextMeshProUGUI animalCountText;
+    [SerializeField] private ParticleSystem sandTrailParticle;
 
     private float groundCheckRadius = 0.3f;
     private float speed = 8;
@@ -46,12 +48,23 @@ public class PlayerController : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
 
-        //animator.SetBool("Grounded", isGrounded);
+        animator.SetBool("Grounded", isGrounded);
+        if (isGrounded)
+        {
+            if (sandTrailParticle.isEmitting)
+            {
+                sandTrailParticle.Play();
+            }
+        }
+        else
+        {
+            sandTrailParticle.Stop();
+        }
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded && canMove)
         {
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            //animator.SetBool("Jump", true);
+            animator.SetBool("Jump", true);
         }
         if (canMove)
         {
@@ -68,14 +81,14 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 speed = moveSpeed * runMultiplier;
-                //animator.SetBool("Run", true);
-                //animator.SetBool("Walk", false);
+                animator.SetBool("Run", true);
+                animator.SetBool("Walk", false);
             }
             else
             {
                 speed = moveSpeed * walkMultiplier;
-                //animator.SetBool("Run", true);
-                //animator.SetBool("Walk", true);
+                animator.SetBool("Run", false);
+                animator.SetBool("Walk", true);
             }
             Vector3 viewDir = transform.position - Camera.main.transform.position;
             viewDir.y = 0;
@@ -87,16 +100,18 @@ public class PlayerController : MonoBehaviour
             
             //rigidBody.MovePosition(rigidBody.position + moveDirection * (speed * Time.fixedDeltaTime));
 
-            //animator.SetFloat("RunSpeedMult", direction.magnitude * rigidBody.velocity.magnitude * runVisualMultiplier);
+            animator.SetFloat("RunSpeedMult", direction.magnitude * rigidBody.velocity.magnitude * runVisualMultiplier);
+            animator.SetFloat("WalkSpeedMult", direction.magnitude * rigidBody.velocity.magnitude * walkVisualMultiplier);
         }
         else
         {
-            //animator.SetBool("Run", false);
+            animator.SetBool("Run", false);
+            animator.SetBool("Walk", false);
         }
 
         if (rigidBody.velocity.y <= 0)
         {
-            //animator.SetBool("Jump", false);
+            animator.SetBool("Jump", false);
         }
     }
 
@@ -120,14 +135,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Animal"))
-        {
-            AddAnimal();
-            Destroy(other.gameObject);
-        }
 
-        else if (other.CompareTag("Animal2"))
-        {
-        }
     }
 }
