@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Grounded", isGrounded);
         if (isGrounded)
         {
-            if (sandTrailParticle.isEmitting)
+            if (!sandTrailParticle.isEmitting)
             {
                 sandTrailParticle.Play();
             }
