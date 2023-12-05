@@ -212,7 +212,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.10808566, y: 0.0000000074069333, z: -8.0530105e-10, w: 0.99414164}
+  m_LocalRotation: {x: 0.10808566, y: -4.2996104e-16, z: 4.6746478e-17, w: 0.99414164}
   m_LocalPosition: {x: 0, y: 3, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -647,7 +647,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469896832}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.10808568, y: 0.0000000074069324, z: -8.053011e-10, w: 0.9941416}
+  m_LocalRotation: {x: 0.108085684, y: -4.3368256e-16, z: 8.097644e-17, w: 0.9941416}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -866,7 +866,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1595666115}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0046693054, y: -0.00000002010953, z: 9.389857e-11, w: 0.9999891}
+  m_LocalRotation: {x: 0.004669281, y: 0.000000025591637, z: -1.1949587e-10, w: 0.9999891}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1380,11 +1380,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 0
-  m_RequiresDepthTextureOption: 2
-  m_RequiresOpaqueTextureOption: 2
+  m_RequiresDepthTextureOption: 0
+  m_RequiresOpaqueTextureOption: 0
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 1
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
