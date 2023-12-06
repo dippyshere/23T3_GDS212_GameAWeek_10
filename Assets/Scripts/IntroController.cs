@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class IntroController : MonoBehaviour
@@ -10,6 +11,9 @@ public class IntroController : MonoBehaviour
     public float maxZoom = 2f;
     public float zoomDuration = 5f;
     public float textDuration = 3f;
+
+    public GameObject textObject1;
+    public GameObject textObject2;
 
     private Camera mainCamera;
     private RectTransform imageTransform;
@@ -25,7 +29,7 @@ public class IntroController : MonoBehaviour
         // Set initial camera field of view
         mainCamera.fieldOfView = 60f;
 
-        Invoke("StartNextPhase", zoomDuration);
+        //Invoke("StartNextPhase", zoomDuration);
     }
 
     void Update()
@@ -75,5 +79,17 @@ public class IntroController : MonoBehaviour
 
         // Start the next phase
         Invoke("StartNextPhase", 0.5f); // Adjust delay as needed
+    }
+
+    public void ContinueText()
+    {
+        textObject1.SetActive(false);
+        textObject2.SetActive(true);
+        Invoke("LoadMainLevel", 7f);
+    }
+
+    void LoadMainLevel()
+    {
+        SceneManager.LoadScene("MainScene");
     }
 }
