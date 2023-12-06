@@ -52,11 +52,6 @@ Shader "Custom/Snow Interactive" {
     #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
     #pragma multi_compile _ _SHADOWS_SOFT
     #pragma multi_compile_fog
-    #pragma multi_compile _ DIRLIGHTMAP_COMBINED
-    #pragma multi_compile _ LIGHTMAP_ON
-    #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
-    #pragma multi_compile _ _MIXED_LIGHTING_SUBTRACTIVE
-    #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
 
 
     ControlPoint TessellationVertexProgram(Attributes v)
@@ -197,8 +192,5 @@ Shader "Custom/Snow Interactive" {
             
             ENDHLSL
         }
-        UsePass "Universal Render Pipeline/Lit/DepthOnly"
-
-        UsePass "Universal Render Pipeline/Lit/Meta"
     }
 }
