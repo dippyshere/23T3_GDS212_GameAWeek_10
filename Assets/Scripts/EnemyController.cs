@@ -43,7 +43,7 @@ public class EnemyController : MonoBehaviour
         }
         if (player != null)
         {
-            if (Vector3.Distance(transform.position, player.transform.position) <= movementRange)
+            if (Vector3.Distance(homePosition.position, player.transform.position) <= movementRange)
             {
                 agent.SetDestination(player.transform.position);
                 healthBar.fillAmount = 1 - (health / 100);

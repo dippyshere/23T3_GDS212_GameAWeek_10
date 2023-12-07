@@ -38,7 +38,11 @@ public class PlayerController : MonoBehaviour
     private float nextAttackTime = 0f;
 
     private float health = 100f;
+    // inventory
     public float water = 100f;
+    public float gold = 0f;
+    public float gems = 0f;
+    private List<GemTradeType> gemInventory = new List<GemTradeType>();
 
     void Start()
     {
@@ -178,5 +182,51 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
+    }
+
+    public int WaterReplenishCost()
+    {
+        int cost = Mathf.RoundToInt(20 - (water / 5));
+        return Mathf.Clamp(cost, 1, 20);
+    }
+
+    public void ReplenishWater()
+    {
+        water = 100;
+    }
+
+    public void AddGold(int goldQuantity)
+    {
+        gold += goldQuantity;
+    }
+
+    public void AddGems(GemTradeType gemType)
+    {
+        gemInventory.Add(gemType);
+    }
+
+    public int TradeGemsValue()
+    {
+        int goldToAdd = 0;
+        foreach (GemTradeType gemType in gemInventory)
+        {
+            goldToAdd += (int)gemType;
+        }
+        return goldToAdd;
+    }
+
+    public void TradeGems()
+    {
+        int goldToAdd = TradeGemsValue();
+        gold += goldToAdd;
+        gemInventory.Clear();
+    }
+
+    public enum GemTradeType
+    {
+        Stone1 = 10,
+        Stone2 = 15,
+        Stone5 = 20,
+        Stone6 = 25,
     }
 }
