@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028328, g: 0.22571322, b: 0.30692163, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -217,7 +217,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -215.57489, y: 153.19458}
+  m_AnchoredPosition: {x: -215.57489, y: 235}
   m_SizeDelta: {x: 534.4048, y: 89.4651}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &174555518
@@ -250,8 +250,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Year 1216AU. Zraedon is occupied by Prydain, a land to the North.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 19999f31582726a49873411962bddc48, type: 2}
-  m_sharedMaterial: {fileID: 1874237034401390532, guid: 19999f31582726a49873411962bddc48,
+  m_fontAsset: {fileID: 11400000, guid: e6cbd2ef731425042a3387a1cd4bfcb3, type: 2}
+  m_sharedMaterial: {fileID: -2937656449856118890, guid: e6cbd2ef731425042a3387a1cd4bfcb3,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -352,7 +352,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -216.5, y: 141.6189}
+  m_AnchoredPosition: {x: -216.5, y: 195}
   m_SizeDelta: {x: 533, y: 112.7622}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &201627619
@@ -385,8 +385,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Times are tough for Zraedon, so you must supply yourself and fend off enemies.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 19999f31582726a49873411962bddc48, type: 2}
-  m_sharedMaterial: {fileID: 1874237034401390532, guid: 19999f31582726a49873411962bddc48,
+  m_fontAsset: {fileID: 11400000, guid: e6cbd2ef731425042a3387a1cd4bfcb3, type: 2}
+  m_sharedMaterial: {fileID: -2937656449856118890, guid: e6cbd2ef731425042a3387a1cd4bfcb3,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -450,7 +450,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &374314398
@@ -1350,8 +1350,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: You are Roshan Dannen, a knight of Zraedon.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 19999f31582726a49873411962bddc48, type: 2}
-  m_sharedMaterial: {fileID: 1874237034401390532, guid: 19999f31582726a49873411962bddc48,
+  m_fontAsset: {fileID: 11400000, guid: e6cbd2ef731425042a3387a1cd4bfcb3, type: 2}
+  m_sharedMaterial: {fileID: -2937656449856118890, guid: e6cbd2ef731425042a3387a1cd4bfcb3,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1485,8 +1485,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Go to each settlement to make sure you have enough water, food, and gold.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 19999f31582726a49873411962bddc48, type: 2}
-  m_sharedMaterial: {fileID: 1874237034401390532, guid: 19999f31582726a49873411962bddc48,
+  m_fontAsset: {fileID: 11400000, guid: e6cbd2ef731425042a3387a1cd4bfcb3, type: 2}
+  m_sharedMaterial: {fileID: -2937656449856118890, guid: e6cbd2ef731425042a3387a1cd4bfcb3,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1550,7 +1550,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1605259337
@@ -1587,7 +1587,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -215.57489, y: -16}
+  m_AnchoredPosition: {x: -215.57489, y: -56}
   m_SizeDelta: {x: 534.4048, y: 89.4651}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1605259339
@@ -1618,11 +1618,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You are tasked with patrolling your local group of settlements and keeping
-    the peace.
+  m_text: You must head to Miastoleken to join the Resistance!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 19999f31582726a49873411962bddc48, type: 2}
-  m_sharedMaterial: {fileID: 1874237034401390532, guid: 19999f31582726a49873411962bddc48,
+  m_fontAsset: {fileID: 11400000, guid: e6cbd2ef731425042a3387a1cd4bfcb3, type: 2}
+  m_sharedMaterial: {fileID: -2937656449856118890, guid: e6cbd2ef731425042a3387a1cd4bfcb3,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1829,10 +1828,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Go forth! Protect your countrymen and hold Zraedon together!
+  m_text: Go forth! Get yourself to Miastoleken and join the fight against Prydain!
+    500 gold will get you there.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 19999f31582726a49873411962bddc48, type: 2}
-  m_sharedMaterial: {fileID: 1874237034401390532, guid: 19999f31582726a49873411962bddc48,
+  m_fontAsset: {fileID: 11400000, guid: e6cbd2ef731425042a3387a1cd4bfcb3, type: 2}
+  m_sharedMaterial: {fileID: -2937656449856118890, guid: e6cbd2ef731425042a3387a1cd4bfcb3,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1923,7 +1923,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -216.5, y: -92}
+  m_AnchoredPosition: {x: -216.5, y: -142}
   m_SizeDelta: {x: 533, y: 112.7622}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1939861580
