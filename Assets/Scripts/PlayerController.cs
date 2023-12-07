@@ -66,6 +66,10 @@ public class PlayerController : MonoBehaviour
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             animator.SetBool("Jump", true);
         }
+        if (Input.GetMouseButtonDown(0) && canMove)
+        {
+            animator.SetBool("Attack", true);
+        }
         if (canMove)
         {
             visualTransform.rotation = Quaternion.Slerp(visualTransform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * 10f);
