@@ -61,6 +61,11 @@ public class PlayerController : MonoBehaviour
     private float verticalInput;
     private bool canMove = true;
     private float nextAttackTime = 0f;
+    private GameObject interactingChest;
+    private GameObject interactingTrade;
+    private GameObject interactingWater;
+    private GameObject interactingConvenience;
+    private GameObject interactingWin;
 
     private float health = 100f;
     // inventory
@@ -139,6 +144,34 @@ public class PlayerController : MonoBehaviour
             Cursor.visible = false;
             freeLookCamera.m_XAxis.m_InputAxisName = "Mouse X";
             freeLookCamera.m_YAxis.m_InputAxisName = "Mouse Y";
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (interactingChest != null)
+            {
+                interactingChest.GetComponent<Chest>().OpenChest();
+                interactingChest = null;
+            }
+            if (interactingTrade != null)
+            {
+                OpenTradeGemUI();
+                interactingTrade = null;
+            }
+            if (interactingWater != null)
+            {
+                OpenReplenishUI();
+                interactingWater = null;
+            }
+            if (interactingConvenience != null)
+            {
+                OpenConvenienceUI();
+                interactingConvenience = null;
+            }
+            //if (interactingWin != null)
+            //{
+            //    CloseGameAndClearSaved();
+            //    interactingWin = null;
+            //}
         }
         UpdateUI();
     }
@@ -239,7 +272,50 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("Chest"))
+        {
+            interactingChest = other.gameObject;
+        }
+        if (other.CompareTag("Gems"))
+        {
+            interactingTrade = other.gameObject;
+        }
+        if (other.CompareTag("Water"))
+        {
+            interactingWater = other.gameObject;
+        }
+        if (other.CompareTag("Convenience"))
+        {
+            interactingConvenience = other.gameObject;
+        }
+        if (other.CompareTag("Win"))
+        {
+            interactingWin = other.gameObject;
+        }
+    }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Chest"))
+        {
+            interactingChest = null;
+        }
+        if (other.CompareTag("Gems"))
+        {
+            interactingTrade = null;
+        }
+        if (other.CompareTag("Water"))
+        {
+            interactingWater = null;
+        }
+        if (other.CompareTag("Convenience"))
+        {
+            interactingConvenience = null;
+        }
+        if (other.CompareTag("Win"))
+        {
+            interactingWin = null;
+        }
     }
 
     public int WaterReplenishCost(bool convenience)

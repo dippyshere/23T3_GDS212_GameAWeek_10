@@ -6,6 +6,11 @@ TagManager:
   tags:
   - MainLight
   - Enemy
+  - Chest
+  - Water
+  - Gems
+  - Convenience
+  - Win
   layers:
   - Default
   - TransparentFX
