@@ -4,6 +4,7 @@ using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Cinemachine;
 
 public class PlayerController : MonoBehaviour
@@ -51,6 +52,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Button convenienceWaterButton;
     [SerializeField] private Button convenienceGemButton;
     [SerializeField] private GameObject interactionUI;
+    [SerializeField] private GameObject deathUI;
+    [SerializeField] private TextMeshProUGUI deathGold;
 
     private float groundCheckRadius = 0.3f;
     private float speed = 8;
@@ -74,7 +77,6 @@ public class PlayerController : MonoBehaviour
     public float gold = 0f;
     public float gems = 0f;
     private List<GemTradeType> gemInventory = new List<GemTradeType>();
-    private bool uiOpen = false;
 
     void Start()
     {
@@ -132,7 +134,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.Tab) && canMove)
         {
             inventoryUI.SetActive(true);
-            uiOpen = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             freeLookCamera.m_XAxis.m_InputAxisName = "";
@@ -274,12 +275,21 @@ public class PlayerController : MonoBehaviour
             freeLookCamera.m_YAxis.m_InputAxisValue = 0;
             PlayerPrefs.SetFloat("gems", gems);
             PlayerPrefs.SetFloat("gold", gold);
+            deathUI.SetActive(true);
+            deathGold.text = gold.ToString();
+            deathUI.GetComponent<Animator>().SetBool("Death", true);
+            Invoke("ReloadScene", 2.1f);
         }
         else
         {
             animator.SetBool("TakeDamage", true);
             Debug.Log("Player health: " + health);
         }
+    }
+
+    private void ReloadScene()
+    {
+        SceneManager.LoadScene("MainScene");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -357,6 +367,7 @@ public class PlayerController : MonoBehaviour
     public void AddGems(GemTradeType gemType)
     {
         gemInventory.Add(gemType);
+        Debug.Log("Added " + gemType);
     }
 
     public int TradeGemsValue(bool convenience)
@@ -390,6 +401,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateUI()
     {
+        gems = gemInventory.Count;
         healthBar.fillAmount = health / 100f;
         waterBar.fillAmount = water / 100f;
         goldBar.fillAmount = gold / 500f;

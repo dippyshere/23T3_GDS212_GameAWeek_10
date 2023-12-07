@@ -73,8 +73,23 @@ public class Chest : MonoBehaviour
                 if (gameObjects[i].GetComponent<PlayerController>() != null)
                 {
                     GameObject player = gameObjects[i];
-                    PlayerController.GemTradeType gemType = (PlayerController.GemTradeType)Random.Range(0, 4);
-                    player.GetComponent<PlayerController>().AddGems(gemType);
+                    int randomGemType = Random.Range(0, 3);
+                    if (randomGemType == 0)
+                    {
+                        player.GetComponent<PlayerController>().AddGems(PlayerController.GemTradeType.Stone1);
+                    }
+                    else if (randomGemType == 1)
+                    {
+                        player.GetComponent<PlayerController>().AddGems(PlayerController.GemTradeType.Stone2);
+                    }
+                    else if (randomGemType == 2)
+                    {
+                        player.GetComponent<PlayerController>().AddGems(PlayerController.GemTradeType.Stone5);
+                    }
+                    else
+                    {
+                        player.GetComponent<PlayerController>().AddGems(PlayerController.GemTradeType.Stone6);
+                    }
                 }
             }
         }
