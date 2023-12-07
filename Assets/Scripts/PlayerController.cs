@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -25,6 +26,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform visualTransform;
     [SerializeField] private ParticleSystem sandTrailParticle;
+    [Header("UI References")]
+    [SerializeField] private Image healthBar;
+    [SerializeField] private Image waterBar;
+    [SerializeField] private Image goldBar;
+    [SerializeField] private TextMeshProUGUI goldText;
+    [SerializeField] private TextMeshProUGUI gemsText;
+    [SerializeField] private List<TextMeshProUGUI> waterTexts = new List<TextMeshProUGUI>();
+    [SerializeField] private TextMeshProUGUI goldGoalText;
+    [SerializeField] private TextMeshProUGUI conveienceGoldWaterText;
+    [SerializeField] private TextMeshProUGUI conveienceGoldGemText;
+    [SerializeField] private TextMeshProUGUI convenienceGemText;
+    [SerializeField] private TextMeshProUGUI replenishGoldText;
+    [SerializeField] private TextMeshProUGUI tradeGemsText;
+    [SerializeField] private TextMeshProUGUI tradeGoldText;
+    [SerializeField] private GameObject tradeGemUI;
+    [SerializeField] private GameObject replenishUI;
+    [SerializeField] private GameObject convenienceUI;
+    [SerializeField] private GameObject inventoryUI;
 
     private float groundCheckRadius = 0.3f;
     private float speed = 8;
@@ -89,6 +108,19 @@ public class PlayerController : MonoBehaviour
         {
             visualTransform.rotation = Quaternion.Slerp(visualTransform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * 10f);
         }
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            inventoryUI.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            inventoryUI.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        UpdateUI();
     }
 
     void FixedUpdate()
@@ -228,5 +260,25 @@ public class PlayerController : MonoBehaviour
         Stone2 = 15,
         Stone5 = 20,
         Stone6 = 25,
+    }
+
+    private void UpdateUI()
+    {
+        healthBar.fillAmount = health / 100f;
+        waterBar.fillAmount = water / 100f;
+        goldBar.fillAmount = gold / 500f;
+        goldText.text = gold + " Gold";
+        gemsText.text = gems + " Gems";
+        foreach (TextMeshProUGUI waterText in waterTexts)
+        {
+            waterText.text = (int)water + "% Water";
+        }
+        goldGoalText.text = gold + " / 500 Gold Goal";
+        conveienceGoldWaterText.text = WaterReplenishCost() + " Gold";
+        conveienceGoldGemText.text = TradeGemsValue() + " Gold";
+        convenienceGemText.text = gems + " Gems";
+        replenishGoldText.text = WaterReplenishCost() + " Gold";
+        tradeGemsText.text = gems + " Gems";
+        tradeGoldText.text = TradeGemsValue() + " Gold";
     }
 }

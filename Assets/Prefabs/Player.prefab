@@ -113,13 +113,34 @@ MonoBehaviour:
   attackDamage: 10
   attackRange: 2
   attackRate: 2
-  waterDrainRate: 5
-  waterDrainRateRun: 4
+  waterDrainRate: 0.1
+  waterDrainRateRun: 0.4
   animator: {fileID: 8639895387934446912}
   orientation: {fileID: 7168216120748861166}
   visualTransform: {fileID: 6920951867640313272}
   sandTrailParticle: {fileID: 2159146634379681160}
+  healthBar: {fileID: 0}
+  waterBar: {fileID: 0}
+  goldBar: {fileID: 0}
+  goldText: {fileID: 0}
+  gemsText: {fileID: 0}
+  waterTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  goldGoalText: {fileID: 0}
+  conveienceGoldWaterText: {fileID: 0}
+  conveienceGoldGemText: {fileID: 0}
+  convenienceGemText: {fileID: 0}
+  replenishGoldText: {fileID: 0}
+  tradeGemsText: {fileID: 0}
+  tradeGoldText: {fileID: 0}
+  tradeGemUI: {fileID: 0}
+  replenishUI: {fileID: 0}
+  convenienceUI: {fileID: 0}
+  inventoryUI: {fileID: 0}
   water: 100
+  gold: 0
+  gems: 0
 --- !u!1 &369442598898219977
 GameObject:
   m_ObjectHideFlags: 0
