@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ChestSpawner : MonoBehaviour
 {
-    public GameObject chestPrefab; // Reference to the prefab you want to spawn
+    public GameObject chestPrefab; // Reference to the chest prefab
     public Transform[] spawnerLocations; // Array of spawner locations
+    public WeightedGem[] weightedGemPrefabs; // Array of weighted gem prefabs
 
     void Start()
     {
@@ -19,7 +20,13 @@ public class ChestSpawner : MonoBehaviour
         foreach (Transform spawnerLocation in spawnerLocations)
         {
             // Spawn the chest prefab at the spawner location
-            Instantiate(chestPrefab, spawnerLocation.position, spawnerLocation.rotation);
+            GameObject chest = Instantiate(chestPrefab, spawnerLocation.position, spawnerLocation.rotation);
+
+            // Attach a Chest script to the spawned chest
+            Chest chestScript = chest.AddComponent<Chest>();
+
+            // Pass the weightedGemPrefabs array to the Chest script
+            chestScript.weightedGemPrefabs = weightedGemPrefabs;
         }
     }
 }
