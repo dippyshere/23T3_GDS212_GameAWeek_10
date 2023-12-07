@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Button replenishButton;
     [SerializeField] private Button convenienceWaterButton;
     [SerializeField] private Button convenienceGemButton;
+    [SerializeField] private GameObject interactionUI;
 
     private float groundCheckRadius = 0.3f;
     private float speed = 8;
@@ -73,6 +74,7 @@ public class PlayerController : MonoBehaviour
     public float gold = 0f;
     public float gems = 0f;
     private List<GemTradeType> gemInventory = new List<GemTradeType>();
+    private bool uiOpen = false;
 
     void Start()
     {
@@ -127,9 +129,10 @@ public class PlayerController : MonoBehaviour
         {
             visualTransform.rotation = Quaternion.Slerp(visualTransform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * 10f);
         }
-        if (Input.GetKey(KeyCode.Tab))
+        if (Input.GetKey(KeyCode.Tab) && canMove)
         {
             inventoryUI.SetActive(true);
+            uiOpen = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             freeLookCamera.m_XAxis.m_InputAxisName = "";
@@ -137,13 +140,21 @@ public class PlayerController : MonoBehaviour
             freeLookCamera.m_XAxis.m_InputAxisValue = 0;
             freeLookCamera.m_YAxis.m_InputAxisValue = 0;
         }
-        else
+        else if (canMove)
         {
             inventoryUI.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             freeLookCamera.m_XAxis.m_InputAxisName = "Mouse X";
             freeLookCamera.m_YAxis.m_InputAxisName = "Mouse Y";
+        }
+        if (interactingChest != null || interactingTrade != null || interactingWater != null || interactingConvenience != null)
+        {
+            interactionUI.SetActive(true);
+        }
+        else
+        {
+            interactionUI.SetActive(false);
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -174,6 +185,7 @@ public class PlayerController : MonoBehaviour
             //}
         }
         UpdateUI();
+        interactionUI.transform.LookAt(Camera.main.transform);
     }
 
     void FixedUpdate()
