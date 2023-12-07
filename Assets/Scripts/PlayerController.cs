@@ -15,11 +15,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkVisualMultiplier = 0.4f;
     [SerializeField] private float runVisualMultiplier = 0.08f;
     [SerializeField] private float jumpForce = 15f;
+    [SerializeField] private float attackDamage = 10f;
+    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float attackRate = 0.5f;
+    [SerializeField] private float waterDrainRate = 5f;
+    [SerializeField] private float waterDrainRateRun = 7f;
     [Header("References")]
     [SerializeField] private Animator animator;
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform visualTransform;
-    [SerializeField] private TextMeshProUGUI animalCountText;
     [SerializeField] private ParticleSystem sandTrailParticle;
 
     private float groundCheckRadius = 0.3f;
@@ -31,14 +35,16 @@ public class PlayerController : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
     private bool canMove = true;
-    private int savedAnimals = 0;
+    private float nextAttackTime = 0f;
+
+    private float health = 100f;
+    public float water = 100f;
 
     void Start()
     {
         rigidBody = transform.GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        UpdateAnimalText();
     }
 
     void Update()
@@ -68,7 +74,12 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0) && canMove)
         {
-            animator.SetBool("Attack", true);
+            if (Time.time >= nextAttackTime)
+            {
+                animator.SetBool("Attack", true);
+                nextAttackTime = Time.time + 1f / attackRate;
+                Attack();
+            }
         }
         if (canMove)
         {
@@ -78,15 +89,23 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (water > 0)
+        {
+            water -= Time.deltaTime * waterDrainRate;
+        }
         bool isRunning = direction.magnitude > 0.1f;
 
         if (isRunning && canMove)
         {
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift) && water >= 0)
             {
                 speed = moveSpeed * runMultiplier;
                 animator.SetBool("Run", true);
                 animator.SetBool("Walk", false);
+                if (water > 0)
+                {
+                    water -= Time.deltaTime * waterDrainRateRun;
+                }
             }
             else
             {
@@ -126,15 +145,34 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawSphere(groundCheck.position, groundCheckRadius);
     }
 
-    private void UpdateAnimalText()
+    private void Attack()
     {
-        //animalCountText.text = "Saved Animals: " + savedAnimals.ToString("N0", CultureInfo.InvariantCulture);
+        Collider[] hitEnemies = Physics.OverlapSphere(transform.position, attackRange, LayerMask.GetMask("Enemy"));
+        foreach (Collider enemy in hitEnemies)
+        {
+            enemy.GetComponent<EnemyController>().TakeDamage(attackDamage);
+        }
     }
 
-    public void AddAnimal()
+    public void TakeDamage(float damageDealt)
     {
-        savedAnimals++;
-        UpdateAnimalText();
+        if (health <= 0)
+        {
+            return;
+        }
+        health -= damageDealt;
+        if (health <= 0)
+        {
+            animator.SetTrigger("Die");
+            canMove = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            animator.SetBool("TakeDamage", true);
+            Debug.Log("Player health: " + health);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3645583009731850677}
   - component: {fileID: 8067188944628312886}
   - component: {fileID: 8875617461926545479}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -110,11 +110,16 @@ MonoBehaviour:
   walkVisualMultiplier: 0.3
   runVisualMultiplier: 0.12
   jumpForce: 40
+  attackDamage: 10
+  attackRange: 2
+  attackRate: 2
+  waterDrainRate: 5
+  waterDrainRateRun: 4
   animator: {fileID: 8639895387934446912}
   orientation: {fileID: 7168216120748861166}
   visualTransform: {fileID: 6920951867640313272}
-  animalCountText: {fileID: 0}
   sandTrailParticle: {fileID: 2159146634379681160}
+  water: 100
 --- !u!1 &369442598898219977
 GameObject:
   m_ObjectHideFlags: 0
