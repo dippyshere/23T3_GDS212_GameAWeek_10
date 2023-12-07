@@ -139,7 +139,7 @@ Shader "Custom/Snow Interactive" {
                 // add in the sparkles
                 float sparklesStatic = tex2D(_SparkleNoise, IN.worldPos.xz * _SparkleScale).r;
                 float cutoffSparkles = step(_SparkCutoff,sparklesStatic);				
-                litMainColors += cutoffSparkles  *saturate(1- (effect.g * 2)) * 4;
+                litMainColors += cutoffSparkles * clamp(1.0 - (effect.g * 2), 0.0, 1.0) * 4;
                 
                 
                 // add rim light
