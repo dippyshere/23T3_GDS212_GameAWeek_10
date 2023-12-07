@@ -4,6 +4,7 @@ using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform visualTransform;
     [SerializeField] private ParticleSystem sandTrailParticle;
+    [SerializeField] private CinemachineFreeLook freeLookCamera;
     [Header("UI References")]
     [SerializeField] private Image healthBar;
     [SerializeField] private Image waterBar;
@@ -44,6 +46,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject replenishUI;
     [SerializeField] private GameObject convenienceUI;
     [SerializeField] private GameObject inventoryUI;
+    [SerializeField] private Button tradeGemButton;
+    [SerializeField] private Button replenishButton;
+    [SerializeField] private Button convenienceWaterButton;
+    [SerializeField] private Button convenienceGemButton;
 
     private float groundCheckRadius = 0.3f;
     private float speed = 8;
@@ -68,6 +74,14 @@ public class PlayerController : MonoBehaviour
         rigidBody = transform.GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        if (PlayerPrefs.HasKey("gems"))
+        {
+            gems = PlayerPrefs.GetFloat("gems");
+        }
+        if (PlayerPrefs.HasKey("gold"))
+        {
+            gold = PlayerPrefs.GetFloat("gold");
+        }
     }
 
     void Update()
@@ -113,12 +127,18 @@ public class PlayerController : MonoBehaviour
             inventoryUI.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            freeLookCamera.m_XAxis.m_InputAxisName = "";
+            freeLookCamera.m_YAxis.m_InputAxisName = "";
+            freeLookCamera.m_XAxis.m_InputAxisValue = 0;
+            freeLookCamera.m_YAxis.m_InputAxisValue = 0;
         }
         else
         {
             inventoryUI.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            freeLookCamera.m_XAxis.m_InputAxisName = "Mouse X";
+            freeLookCamera.m_YAxis.m_InputAxisName = "Mouse Y";
         }
         UpdateUI();
     }
@@ -203,6 +223,12 @@ public class PlayerController : MonoBehaviour
             canMove = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            freeLookCamera.m_XAxis.m_InputAxisName = "";
+            freeLookCamera.m_YAxis.m_InputAxisName = "";
+            freeLookCamera.m_XAxis.m_InputAxisValue = 0;
+            freeLookCamera.m_YAxis.m_InputAxisValue = 0;
+            PlayerPrefs.SetFloat("gems", gems);
+            PlayerPrefs.SetFloat("gold", gold);
         }
         else
         {
@@ -216,10 +242,18 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public int WaterReplenishCost()
+    public int WaterReplenishCost(bool convenience)
     {
-        int cost = Mathf.RoundToInt(20 - (water / 5));
-        return Mathf.Clamp(cost, 1, 20);
+        if (convenience)
+        {
+            int cost = Mathf.RoundToInt(40 - (water / 2.5f));
+            return Mathf.Clamp(cost, 1, 40);
+        }
+        else
+        {
+            int cost = Mathf.RoundToInt(20 - (water / 5));
+            return Mathf.Clamp(cost, 1, 20);
+        }
     }
 
     public void ReplenishWater()
@@ -237,19 +271,23 @@ public class PlayerController : MonoBehaviour
         gemInventory.Add(gemType);
     }
 
-    public int TradeGemsValue()
+    public int TradeGemsValue(bool convenience)
     {
         int goldToAdd = 0;
         foreach (GemTradeType gemType in gemInventory)
         {
             goldToAdd += (int)gemType;
         }
+        if (!convenience)
+        {
+            goldToAdd = Mathf.RoundToInt(goldToAdd * 1.5f);
+        }
         return goldToAdd;
     }
 
-    public void TradeGems()
+    public void TradeGems(bool convenience)
     {
-        int goldToAdd = TradeGemsValue();
+        int goldToAdd = TradeGemsValue(convenience);
         gold += goldToAdd;
         gemInventory.Clear();
     }
@@ -274,11 +312,89 @@ public class PlayerController : MonoBehaviour
             waterText.text = (int)water + "% Water";
         }
         goldGoalText.text = gold + " / 500 Gold Goal";
-        conveienceGoldWaterText.text = WaterReplenishCost() + " Gold";
-        conveienceGoldGemText.text = TradeGemsValue() + " Gold";
+        conveienceGoldWaterText.text = WaterReplenishCost(true) + " Gold";
+        conveienceGoldGemText.text = TradeGemsValue(true) + " Gold";
         convenienceGemText.text = gems + " Gems";
-        replenishGoldText.text = WaterReplenishCost() + " Gold";
+        replenishGoldText.text = WaterReplenishCost(false) + " Gold";
         tradeGemsText.text = gems + " Gems";
-        tradeGoldText.text = TradeGemsValue() + " Gold";
+        tradeGoldText.text = TradeGemsValue(false) + " Gold";
+        tradeGemButton.interactable = gemInventory.Count > 0;
+        replenishButton.interactable = water < 100;
+        convenienceWaterButton.interactable = water < 100;
+        convenienceGemButton.interactable = gemInventory.Count > 0;
+    }
+
+    public void BuyWater(bool convenience)
+    {
+        int cost = WaterReplenishCost(convenience);
+        if (gold >= cost)
+        {
+            gold -= cost;
+            ReplenishWater();
+        }
+    }
+
+    public void SellGems(bool convenience)
+    {
+        int value = TradeGemsValue(convenience);
+        if (value > 0)
+        {
+            gold += value;
+            gemInventory.Clear();
+        }
+    }
+
+    public void CloseUI()
+    {
+        tradeGemUI.SetActive(false);
+        replenishUI.SetActive(false);
+        convenienceUI.SetActive(false);
+        canMove = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        freeLookCamera.m_XAxis.m_InputAxisName = "Mouse X";
+        freeLookCamera.m_YAxis.m_InputAxisName = "Mouse Y";
+    }
+
+    public void OpenTradeGemUI()
+    {
+        tradeGemUI.SetActive(true);
+        canMove = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        freeLookCamera.m_XAxis.m_InputAxisName = "";
+        freeLookCamera.m_YAxis.m_InputAxisName = "";
+        freeLookCamera.m_XAxis.m_InputAxisValue = 0;
+        freeLookCamera.m_YAxis.m_InputAxisValue = 0;
+    }
+
+    public void OpenReplenishUI()
+    {
+        replenishUI.SetActive(true);
+        canMove = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        freeLookCamera.m_XAxis.m_InputAxisName = "";
+        freeLookCamera.m_YAxis.m_InputAxisName = "";
+        freeLookCamera.m_XAxis.m_InputAxisValue = 0;
+        freeLookCamera.m_YAxis.m_InputAxisValue = 0;
+    }
+
+    public void OpenConvenienceUI()
+    {
+        convenienceUI.SetActive(true);
+        canMove = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        freeLookCamera.m_XAxis.m_InputAxisName = "";
+        freeLookCamera.m_YAxis.m_InputAxisName = "";
+        freeLookCamera.m_XAxis.m_InputAxisValue = 0;
+        freeLookCamera.m_YAxis.m_InputAxisValue = 0;
+    }
+
+    public void CloseGameAndClearSaved()
+    {
+        PlayerPrefs.DeleteAll();
+        Application.Quit();
     }
 }

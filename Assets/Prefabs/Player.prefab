@@ -113,8 +113,8 @@ MonoBehaviour:
   attackDamage: 10
   attackRange: 2
   attackRate: 2
-  waterDrainRate: 0.1
-  waterDrainRateRun: 0.4
+  waterDrainRate: 0.15
+  waterDrainRateRun: 0.5
   animator: {fileID: 8639895387934446912}
   orientation: {fileID: 7168216120748861166}
   visualTransform: {fileID: 6920951867640313272}
