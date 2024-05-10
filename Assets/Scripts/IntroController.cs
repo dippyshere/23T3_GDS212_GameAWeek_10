@@ -14,35 +14,17 @@ public class IntroController : MonoBehaviour
 
     public GameObject textObject1;
     public GameObject textObject2;
+    public Animator transitionAnimator;
 
-    private Camera mainCamera;
-    private RectTransform imageTransform;
     private int currentTextIndex = 0;
 
     void Start()
     {
         ActivateTextElements();
 
-        mainCamera = Camera.main;
-        imageTransform = GetComponentInChildren<Image>().rectTransform;
-
-        // Set initial camera field of view
-        mainCamera.fieldOfView = 60f;
-
         //Invoke("StartNextPhase", zoomDuration);
     }
 
-    void Update()
-    {
-        // Zoom in gradually
-        if (Time.time < zoomDuration)
-        {
-            float newFieldOfView = mainCamera.fieldOfView - zoomSpeed * Time.deltaTime;
-
-            // Clamp zoom to a maximum value
-            mainCamera.fieldOfView = Mathf.Clamp(newFieldOfView, maxZoom, 60f);
-        }
-    }
 
     void ActivateTextElements()
     {
@@ -85,7 +67,13 @@ public class IntroController : MonoBehaviour
     {
         textObject1.SetActive(false);
         textObject2.SetActive(true);
-        Invoke("LoadMainLevel", 7f);
+        Invoke("FadeOut", 7f);
+        Invoke("LoadMainLevel", 8f);
+    }
+
+    private void FadeOut()
+    {
+        transitionAnimator.SetTrigger("FadeOut");
     }
 
     void LoadMainLevel()

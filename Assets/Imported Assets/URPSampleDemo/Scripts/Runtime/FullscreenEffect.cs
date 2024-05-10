@@ -1,24 +1,17 @@
 using System;
-//using System.CodeDom;
-//using System.Collections;
-//using System.Collections.Generic;
 using System.Linq;
-//using System.Reflection;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-//using UnityEngine.UIElements;
-//using static FullScreenPassRendererFeature;
-//using static UnityEditor.ShaderData;
 
 // Empty class to be used in scenes and doesn't implement any additional overrides
-public class FullscreenEffect : FullscreenEffectBase<FullscreenPassBase>
+public class FullscreenEffect : FullscreenEffectBase<FullscreenPassBase<FullscreenPassDataBase>>
 {
 }
 
 [ExecuteAlways]
-public class FullscreenEffectBase<T> : MonoBehaviour where T:FullscreenPassBase, new()
+public class FullscreenEffectBase<T> : MonoBehaviour where T:FullscreenPassBase<FullscreenPassDataBase>, new()
 {
     private T _pass;
 
@@ -33,7 +26,7 @@ public class FullscreenEffectBase<T> : MonoBehaviour where T:FullscreenPassBase,
     [SerializeField]
     private int _injectionPointOffset = 0;
     [SerializeField]
-    private ScriptableRenderPassInput _inputRequirements = ScriptableRenderPassInput.None;
+    private ScriptableRenderPassInput _inputRequirements = ScriptableRenderPassInput.Color;
     [SerializeField]
     private CameraType _cameraType = CameraType.Game | CameraType.SceneView;
 
@@ -67,6 +60,7 @@ public class FullscreenEffectBase<T> : MonoBehaviour where T:FullscreenPassBase,
         }
         _pass.passName = _passName;
 
+        _pass.inputRequirements = _inputRequirements;
         _pass.ConfigureInput(_inputRequirements);
     }
 
@@ -89,16 +83,16 @@ public class FullscreenEffectBase<T> : MonoBehaviour where T:FullscreenPassBase,
     }
 }
 
-public class FullscreenPassBase : ScriptableRenderPass
+public class FullscreenPassBase<T> : ScriptableRenderPass where T : FullscreenPassDataBase, new()
 {
     public Material material;
 
     public bool hasYFlipKeyword;
     public LocalKeyword yFlipKeyword;
     public string passName = "Fullscreen Pass";
+    public ScriptableRenderPassInput inputRequirements;
 
-    public UnityAction<Material> additionalExecuteAction;
-
+    #region Legacy
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
     {
         if (hasYFlipKeyword)
@@ -114,4 +108,57 @@ public class FullscreenPassBase : ScriptableRenderPass
         context.ExecuteCommandBuffer(cmd);
         cmd.Clear();
     }
+    #endregion
+
+    #region RenderGraph
+    public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+    {
+        var resourceData = frameData.Get<UniversalResourceData>();
+        var cameraData = frameData.Get<UniversalCameraData>();
+
+        using (var builder = renderGraph.AddRasterRenderPass(passName, out T passData))
+        {
+            passData.cameraData = cameraData;
+            passData.hasYFlipKeyword = hasYFlipKeyword;
+
+            // Set buffers access.
+            if (inputRequirements.HasFlag(ScriptableRenderPassInput.Color))
+            {
+                passData.textureHandle = resourceData.activeColorTexture;
+                builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
+            }
+            if (inputRequirements.HasFlag(ScriptableRenderPassInput.Depth))
+                builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.Read);
+            if (inputRequirements.HasFlag(ScriptableRenderPassInput.Normal))
+                builder.UseTexture(resourceData.cameraNormalsTexture, AccessFlags.Read);
+            if (inputRequirements.HasFlag(ScriptableRenderPassInput.Motion))
+                builder.UseTexture(resourceData.motionVectorColor, AccessFlags.Read);
+
+            builder.SetRenderFunc((T data, RasterGraphContext context) => ExecuteRenderGraph(data, context));
+        }
+    }
+
+    public virtual void ExecuteRenderGraph(T passData, RasterGraphContext rgContext)
+    {
+        var cmd = rgContext.cmd;
+
+        if (hasYFlipKeyword && passData.textureHandle.IsValid() )
+            material.SetKeyword(
+                yFlipKeyword,
+                passData.cameraData.IsRenderTargetProjectionMatrixFlipped(passData.textureHandle)
+                );
+
+        cmd.DrawProcedural(Matrix4x4.identity, material, 0, MeshTopology.Triangles, 3, 1, null);
+    }
+    #endregion
+}
+
+public class FullscreenPassDataBase
+{
+    public UniversalCameraData cameraData;
+    public TextureHandle textureHandle;
+    public bool hasYFlipKeyword;
+
+    public FullscreenPassDataBase()
+    { }
 }

@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
@@ -8,9 +7,9 @@ public class OasisFog : FullscreenEffectBase<OasisFogPass>
 {
 }
 
-public class OasisFogPass : FullscreenPassBase
+public class OasisFogPass : FullscreenPassBase<FullscreenPassDataBase>
 {
-    public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+    void UpdateVolumeSettings()
     {
         var volumeComponent = VolumeManager.instance.stack.GetComponent<OasisFogVolumeComponent>();
 
@@ -27,7 +26,19 @@ public class OasisFogPass : FullscreenPassBase
         material.SetFloat("_StartDistance", fogStartDistance);
         material.SetFloat("_SunScatteringIntensity", fogSunScatteringIntensity);
         material.SetVector("_Height_Range", fogHeightRange);
+    }
+
+    public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+    {
+        UpdateVolumeSettings();
 
         base.Execute(context, ref renderingData);
+    }
+
+    public override void ExecuteRenderGraph(FullscreenPassDataBase passData, RasterGraphContext rgContext)
+    {
+        UpdateVolumeSettings();
+
+        base.ExecuteRenderGraph(passData, rgContext);
     }
 }

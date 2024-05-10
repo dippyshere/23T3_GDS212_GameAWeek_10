@@ -43,6 +43,50 @@ public class WashiLightController : MonoBehaviour
     [SerializeField]
     private Shader shaderSearchFilter;
 
+
+
+#if UNITY_EDITOR
+    void GetRenderers()
+    {
+        GetRenderersActive(false);
+    }
+
+    void GetRenderersActive(bool includeInactive)
+    {
+        transform.localScale = Vector3.one;
+
+        var bounds = new Bounds(transform.position, Vector3.zero);
+        float x = size.x * 0.5f;
+        float y = size.y * 0.5f;
+        float z = size.z * 0.5f;
+
+        bounds.Encapsulate(transform.TransformPoint(new Vector3(x, y, z)));
+        bounds.Encapsulate(transform.TransformPoint(new Vector3(-x, y, z)));
+        bounds.Encapsulate(transform.TransformPoint(new Vector3(x, -y, z)));
+        bounds.Encapsulate(transform.TransformPoint(new Vector3(-x, -y, z)));
+        bounds.Encapsulate(transform.TransformPoint(new Vector3(x, y, -z)));
+        bounds.Encapsulate(transform.TransformPoint(new Vector3(-x, y, -z)));
+        bounds.Encapsulate(transform.TransformPoint(new Vector3(x, -y, -z)));
+        bounds.Encapsulate(transform.TransformPoint(new Vector3(-x, -y, -z)));
+
+        renderers = FindObjectsByType<Renderer>(FindObjectsInactive.Include,FindObjectsSortMode.None).Where(r => {
+            return r.bounds.Intersects(bounds) && r.gameObject.name.Contains(objectsSearchFilter) && ((shaderSearchFilter == null) ? true : r.sharedMaterials.Any(m => m.shader == shaderSearchFilter));
+        }).ToArray();
+    }
+
+    void GetAndEnableFacingRenderers()
+    {
+        GetRenderersActive(true);
+
+        foreach (var r in renderers)
+            r.gameObject.SetActive(Vector3.Dot(r.transform.forward, transform.forward) < 0);
+
+        renderers = renderers.Where(r => r.gameObject.activeSelf).ToArray();
+    }
+
+    [ContextMenuItem("Get matching renderers in volume", "GetRenderers")]
+    [ContextMenuItem("Get matching renderers in volume + enable", "GetAndEnableFacingRenderers")]
+#endif
     [SerializeField]
     private Renderer[] renderers;
 
@@ -150,48 +194,4 @@ public class WashiLightController : MonoBehaviour
         Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
         Gizmos.DrawWireCube(Vector3.zero, size);
     }
-
-#if UNITY_EDITOR
-    [ContextMenuItem("Get matching renderers in volume", "GetRenderers")]
-    [ContextMenuItem("Get matching renderers in volume + enable", "GetAndEnableFacingRenderers")]
-    private bool dummyField;
-
-    void GetRenderers()
-    {
-        GetRenderersActive(false);
-    }
-
-    void GetRenderersActive(bool includeInactive)
-    {
-        transform.localScale = Vector3.one;
-
-        var bounds = new Bounds(transform.position, Vector3.zero);
-        float x = size.x * 0.5f;
-        float y = size.y * 0.5f;
-        float z = size.z * 0.5f;
-
-        bounds.Encapsulate(transform.TransformPoint(new Vector3(x, y, z)));
-        bounds.Encapsulate(transform.TransformPoint(new Vector3(-x, y, z)));
-        bounds.Encapsulate(transform.TransformPoint(new Vector3(x, -y, z)));
-        bounds.Encapsulate(transform.TransformPoint(new Vector3(-x, -y, z)));
-        bounds.Encapsulate(transform.TransformPoint(new Vector3(x, y, -z)));
-        bounds.Encapsulate(transform.TransformPoint(new Vector3(-x, y, -z)));
-        bounds.Encapsulate(transform.TransformPoint(new Vector3(x, -y, -z)));
-        bounds.Encapsulate(transform.TransformPoint(new Vector3(-x, -y, -z)));
-
-        renderers = FindObjectsOfType<Renderer>(includeInactive).Where(r => {
-            return r.bounds.Intersects(bounds) && r.gameObject.name.Contains(objectsSearchFilter) && ((shaderSearchFilter == null) ? true : r.sharedMaterials.Any(m => m.shader == shaderSearchFilter));
-        }).ToArray();
-    }
-
-    void GetAndEnableFacingRenderers()
-    {
-        GetRenderersActive(true);
-
-        foreach (var r in renderers)
-            r.gameObject.SetActive( Vector3.Dot(r.transform.forward, transform.forward) < 0 );
-
-        renderers = renderers.Where(r => r.gameObject.activeSelf).ToArray();
-    }
-#endif
 }

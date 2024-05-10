@@ -41,7 +41,7 @@ Material:
     - _NoiseScale: 0.09
     - _NoiseWeight: 0.01
     - _PathBlending: 3
-    - _RimPower: 20
+    - _RimPower: 9.6
     - _SnowDepth: 0.95
     - _SnowHeight: 0.012
     - _SnowTextureOpacity: 0.94
@@ -53,6 +53,7 @@ Material:
     - _Color: {r: 0.8796226, g: 0.49693304, b: 0.10946172, a: 1}
     - _PathColorIn: {r: 0.22827475, g: 0.13643117, b: 0.023264745, a: 1}
     - _PathColorOut: {r: 22.404413, g: 0.607632, b: 0, a: 1}
-    - _RimColor: {r: 0.3679245, g: 0.3679245, b: 0.3679245, a: 1}
+    - _RimColor: {r: 0.0078125, g: 0.0037580617, b: 0, a: 1}
     - _ShadowColor: {r: 0.93303305, g: 0.43043014, b: 0, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
