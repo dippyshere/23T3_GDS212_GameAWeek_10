@@ -9,7 +9,7 @@ Shader "Custom/Snow Interactive" {
         [Space]
         [Header(Tesselation)]
         _MaxTessDistance("Max Tessellation Distance", Range(10,100)) = 50
-        _Tess("Tessellation", Range(1,32)) = 20
+        _Tess("Tessellation", Range(1,512)) = 20
 
         [Space]
         [Header(Snow)]

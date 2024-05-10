@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -11,19 +12,17 @@ public class HDRFogOverride : MonoBehaviour
     
     private void OnEnable()
     {
-        // subscribe to RenderPipelineManager.beginFrameRendering
-        RenderPipelineManager.beginFrameRendering += BeginFrame;
-        // subscribe to RenderPipelineManager.endFrameRendering
-        RenderPipelineManager.endFrameRendering += EndFrame;
+        RenderPipelineManager.beginContextRendering += BeginFrame;
+        RenderPipelineManager.endContextRendering += EndFrame;
     }
     
     private void OnDisable()
     {
-        RenderPipelineManager.beginFrameRendering -= BeginFrame;
-        RenderPipelineManager.endFrameRendering -= EndFrame;
+        RenderPipelineManager.beginContextRendering -= BeginFrame;
+        RenderPipelineManager.endContextRendering -= EndFrame;
     }
 
-    private void BeginFrame(ScriptableRenderContext arg1, Camera[] arg2)
+    private void BeginFrame(ScriptableRenderContext arg1, List<Camera> arg2)
     {
         // get current fog color
         _previousFogColor = RenderSettings.fogColor;
@@ -31,7 +30,7 @@ public class HDRFogOverride : MonoBehaviour
         RenderSettings.fogColor = FogColor;
     }
     
-    private void EndFrame(ScriptableRenderContext arg1, Camera[] arg2)
+    private void EndFrame(ScriptableRenderContext arg1, List<Camera> arg2)
     {
         // revert fog color to previous color
         RenderSettings.fogColor = _previousFogColor;

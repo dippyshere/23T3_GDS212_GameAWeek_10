@@ -810,6 +810,7 @@
     "m_OutputNode": {
         "m_Id": ""
     },
+    "m_SubDatas": [],
     "m_ActiveTargets": [
         {
             "m_Id": "8c150fb663de413eb8f4f55077d3cf54"
@@ -1365,7 +1366,7 @@
     "m_Hidden": false,
     "m_Value": {
         "x": 0.0,
-        "y": 50.0,
+        "y": 20.0,
         "z": 0.0,
         "w": 0.0
     }
@@ -2782,7 +2783,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.0,
+    "m_Value": 20.0,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,
@@ -3317,7 +3318,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.10000000149011612,
+    "m_Value": 0.004999999888241291,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,
@@ -3346,6 +3347,9 @@
     "m_AlphaClip": false,
     "m_CastShadows": true,
     "m_ReceiveShadows": true,
+    "m_DisableTint": false,
+    "m_AdditionalMotionVectorMode": 0,
+    "m_AlembicMotionVectors": false,
     "m_SupportsLODCrossFade": false,
     "m_CustomEditorGUI": "",
     "m_SupportVFX": false
@@ -3968,9 +3972,9 @@
     "m_Hidden": false,
     "m_Value": {
         "r": 1.0,
-        "g": 1.0,
-        "b": 1.0,
-        "a": 0.0
+        "g": 0.5215277075767517,
+        "b": 0.3254716992378235,
+        "a": 1.0
     },
     "isMainColor": false,
     "m_ColorMode": 1

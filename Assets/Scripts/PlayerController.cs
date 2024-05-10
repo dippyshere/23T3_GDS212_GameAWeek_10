@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Cinemachine;
+using Unity.Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -225,8 +225,8 @@ public class PlayerController : MonoBehaviour
             
             //rigidBody.MovePosition(rigidBody.position + moveDirection * (speed * Time.fixedDeltaTime));
 
-            animator.SetFloat("RunSpeedMult", direction.magnitude * rigidBody.velocity.magnitude * runVisualMultiplier);
-            animator.SetFloat("WalkSpeedMult", direction.magnitude * rigidBody.velocity.magnitude * walkVisualMultiplier);
+            animator.SetFloat("RunSpeedMult", direction.magnitude * rigidBody.linearVelocity.magnitude * runVisualMultiplier);
+            animator.SetFloat("WalkSpeedMult", direction.magnitude * rigidBody.linearVelocity.magnitude * walkVisualMultiplier);
         }
         else
         {
@@ -234,7 +234,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("Walk", false);
         }
 
-        if (rigidBody.velocity.y <= 0)
+        if (rigidBody.linearVelocity.y <= 0)
         {
             animator.SetBool("Jump", false);
         }
