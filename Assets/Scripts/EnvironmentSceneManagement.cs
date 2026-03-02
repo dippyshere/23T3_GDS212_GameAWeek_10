@@ -12,7 +12,7 @@ public class EnvironmentSceneManagement : MonoBehaviour
     private void Awake()
     {
         // check if the scene is loaded
-        if (SceneManager.GetSceneByName(mainSceneName).isLoaded == false && loadMainScene && !Application.isEditor)
+        if (!SceneManager.GetSceneByName(mainSceneName).isLoaded && loadMainScene && !Application.isEditor)
         {
             // load the scene on top of the current scene
             SceneManager.LoadSceneAsync(mainSceneName, LoadSceneMode.Additive);
@@ -22,7 +22,7 @@ public class EnvironmentSceneManagement : MonoBehaviour
     // workaround for editor
     private void Start()
     {
-        if (SceneManager.GetSceneByName(mainSceneName).isLoaded == false && loadMainScene && Application.isEditor)
+        if (!SceneManager.GetSceneByName(mainSceneName).isLoaded && loadMainScene && Application.isEditor)
         {
             // load the scene on top of the current scene
             SceneManager.LoadSceneAsync(mainSceneName, LoadSceneMode.Additive);

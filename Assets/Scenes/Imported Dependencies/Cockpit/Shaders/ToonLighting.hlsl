@@ -11,12 +11,12 @@ void MainLight_float(float3 worldPos, out float3 direction, out float3 color, ou
     color = float3(1,1,1);
     shadow = 1;
     #else
-    
+
     Light mainLight = GetMainLight(TransformWorldToShadowCoord(worldPos), worldPos, unity_ProbesOcclusion);
     shadow = mainLight.shadowAttenuation;
     direction = mainLight.direction;
     color = mainLight.color;
-    
+
     #endif
 }
 
@@ -28,12 +28,12 @@ void MainLight_half(half3 worldPos, out half3 direction, out half3 color, out ha
     shadow = 1;
 
     #else
-    
+
     Light mainLight = GetMainLight(TransformWorldToShadowCoord(worldPos), worldPos, unity_ProbesOcclusion);
     shadow = mainLight.shadowAttenuation;
     direction = mainLight.direction;
     color = mainLight.color;
-    
+
     #endif
 }
 
@@ -47,7 +47,7 @@ void MainLightNoShadow_float(out float3 direction, float3 color)
     Light mainLight = GetMainLight();
     direction = mainLight.direction;
     color = mainLight.color;
-    
+
     #endif
 }
 

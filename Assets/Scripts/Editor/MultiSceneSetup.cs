@@ -16,9 +16,9 @@ public static class MultiSceneSetupMenu
     [MenuItem("Assets/Multi Scene Setup/Create")]
     public static void CreateNewSceneSetup()
     {
-        var folderPath = TryGetSelectedFolderPathInProjectsTab();
+        string folderPath = TryGetSelectedFolderPathInProjectsTab();
 
-        var assetPath = ConvertFullAbsolutePathToAssetPath(
+        string assetPath = ConvertFullAbsolutePathToAssetPath(
             Path.Combine(folderPath, "SceneSetup.asset"));
 
         SaveCurrentSceneSetup(assetPath);
@@ -33,7 +33,7 @@ public static class MultiSceneSetupMenu
     [MenuItem("Assets/Multi Scene Setup/Overwrite")]
     public static void SaveSceneSetup()
     {
-        var assetPath = ConvertFullAbsolutePathToAssetPath(
+        string assetPath = ConvertFullAbsolutePathToAssetPath(
             TryGetSelectedFilePathInProjectsTab());
 
         SaveCurrentSceneSetup(assetPath);
@@ -41,7 +41,7 @@ public static class MultiSceneSetupMenu
 
     static void SaveCurrentSceneSetup(string assetPath)
     {
-        var loader = ScriptableObject.CreateInstance<MultiSceneSetup>();
+        MultiSceneSetup loader = ScriptableObject.CreateInstance<MultiSceneSetup>();
 
         loader.Setups = EditorSceneManager.GetSceneManagerSetup();
 
@@ -50,20 +50,20 @@ public static class MultiSceneSetupMenu
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log(string.Format("Scene setup '{0}' saved", Path.GetFileNameWithoutExtension(assetPath)));
+        Debug.Log($"Scene setup '{Path.GetFileNameWithoutExtension(assetPath)}' saved");
     }
 
     [MenuItem("Assets/Multi Scene Setup/Load")]
     public static void RestoreSceneSetup()
     {
-        var assetPath = ConvertFullAbsolutePathToAssetPath(
+        string assetPath = ConvertFullAbsolutePathToAssetPath(
             TryGetSelectedFilePathInProjectsTab());
 
-        var loader = AssetDatabase.LoadAssetAtPath<MultiSceneSetup>(assetPath);
+        MultiSceneSetup loader = AssetDatabase.LoadAssetAtPath<MultiSceneSetup>(assetPath);
 
         EditorSceneManager.RestoreSceneManagerSetup(loader.Setups);
 
-        Debug.Log(string.Format("Scene setup '{0}' restored", Path.GetFileNameWithoutExtension(assetPath)));
+        Debug.Log($"Scene setup '{Path.GetFileNameWithoutExtension(assetPath)}' restored");
     }
 
     [MenuItem("Assets/Multi Scene Setup", true)]
@@ -97,14 +97,9 @@ public static class MultiSceneSetupMenu
 
     static string TryGetSelectedFilePathInProjectsTab()
     {
-        var selectedPaths = GetSelectedFilePathsInProjectsTab();
+        List<string> selectedPaths = GetSelectedFilePathsInProjectsTab();
 
-        if (selectedPaths.Count == 1)
-        {
-            return selectedPaths[0];
-        }
-
-        return null;
+        return selectedPaths.Count == 1 ? selectedPaths[0] : null;
     }
 
     // Returns the best guess directory in projects pane
@@ -113,14 +108,9 @@ public static class MultiSceneSetupMenu
     // Note that the path is relative to the Assets folder for use in AssetDatabase.GenerateUniqueAssetPath etc.
     static string TryGetSelectedFolderPathInProjectsTab()
     {
-        var selectedPaths = GetSelectedFolderPathsInProjectsTab();
+        List<string> selectedPaths = GetSelectedFolderPathsInProjectsTab();
 
-        if (selectedPaths.Count == 1)
-        {
-            return selectedPaths[0];
-        }
-
-        return null;
+        return selectedPaths.Count == 1 ? selectedPaths[0] : null;
     }
 
     // Note that the path is relative to the Assets folder
@@ -132,22 +122,24 @@ public static class MultiSceneSetupMenu
 
     static List<string> GetSelectedPathsInProjectsTab()
     {
-        var paths = new List<string>();
+        List<string> paths = new List<string>();
 
         UnityEngine.Object[] selectedAssets = Selection.GetFiltered(
             typeof(UnityEngine.Object), SelectionMode.Assets);
 
-        foreach (var item in selectedAssets)
+        foreach (Object item in selectedAssets)
         {
-            var relativePath = AssetDatabase.GetAssetPath(item);
+            string relativePath = AssetDatabase.GetAssetPath(item);
 
-            if (!string.IsNullOrEmpty(relativePath))
+            if (string.IsNullOrEmpty(relativePath))
             {
-                var fullPath = Path.GetFullPath(Path.Combine(
-                    Application.dataPath, Path.Combine("..", relativePath)));
-
-                paths.Add(fullPath);
+                continue;
             }
+
+            string fullPath = Path.GetFullPath(Path.Combine(
+                Application.dataPath, Path.Combine("..", relativePath)));
+
+            paths.Add(fullPath);
         }
 
         return paths;

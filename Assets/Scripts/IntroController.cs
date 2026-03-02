@@ -1,11 +1,13 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class IntroController : MonoBehaviour
 {
+    static readonly int Out = Animator.StringToHash("FadeOut");
     public TMP_Text[] textElements;
     public float zoomSpeed = 1f;
     public float maxZoom = 2f;
@@ -21,7 +23,17 @@ public class IntroController : MonoBehaviour
     void Start()
     {
         ActivateTextElements();
+        if (Application.isMobilePlatform)
+        {
+            Application.targetFrameRate = Mathf.CeilToInt((float)Screen.currentResolution.refreshRateRatio.value);
+        }
+        else
+        {
+            Application.targetFrameRate = -1;
+        }
 
+        InputSystem.settings.SetInternalFeatureFlag("USE_OPTIMIZED_CONTROLS", true);
+        InputSystem.settings.SetInternalFeatureFlag("USE_READ_VALUE_CACHING", true);
         //Invoke("StartNextPhase", zoomDuration);
     }
 
@@ -37,18 +49,20 @@ public class IntroController : MonoBehaviour
     void StartNextPhase()
     {
         // Enable the circle objects
-        foreach (var circle in GetComponentsInChildren<Image>())
+        foreach (Image circle in GetComponentsInChildren<Image>())
         {
             circle.enabled = true;
         }
 
         // Display text for a short duration
-        if (currentTextIndex < textElements.Length)
+        if (currentTextIndex >= textElements.Length)
         {
-            textElements[currentTextIndex].enabled = true;
-            Invoke("HideText", textDuration);
-            currentTextIndex++;
+            return;
         }
+
+        textElements[currentTextIndex].enabled = true;
+        Invoke(nameof(HideText), textDuration);
+        currentTextIndex++;
     }
 
     void HideText()
@@ -60,20 +74,20 @@ public class IntroController : MonoBehaviour
         }
 
         // Start the next phase
-        Invoke("StartNextPhase", 0.5f); // Adjust delay as needed
+        Invoke(nameof(StartNextPhase), 0.5f); // Adjust delay as needed
     }
 
     public void ContinueText()
     {
         textObject1.SetActive(false);
         textObject2.SetActive(true);
-        Invoke("FadeOut", 7f);
-        Invoke("LoadMainLevel", 8f);
+        Invoke(nameof(FadeOut), 7f);
+        Invoke(nameof(LoadMainLevel), 9f);
     }
 
     private void FadeOut()
     {
-        transitionAnimator.SetTrigger("FadeOut");
+        transitionAnimator.SetTrigger(Out);
     }
 
     void LoadMainLevel()

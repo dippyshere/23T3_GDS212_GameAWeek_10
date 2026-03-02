@@ -9,7 +9,13 @@
     #   define UNITY_outputcontrolpoints    outputcontrolpoints
 #endif
 
-struct Varyings
+// Shadow Casting Light geometric parameters. These variables are used when applying the shadow Normal Bias and are set by UnityEngine.Rendering.Universal.ShadowUtils.SetupShadowCasterConstantBuffer in com.unity.render-pipelines.universal/Runtime/ShadowUtils.cs
+// For Directional lights, _LightDirection is used when applying shadow Normal Bias.
+// For Spot lights and Point lights, _LightPosition is used to compute the actual light direction because it is different at each shadow caster geometry vertex.
+float3 _LightDirection;
+float3 _LightPosition;
+
+struct Varyings2
 {       
     float3 worldPos : TEXCOORD1;
     float3 normal : NORMAL;
@@ -17,6 +23,8 @@ struct Varyings
     float2 uv : TEXCOORD0;
     float3 viewDir : TEXCOORD3;
     float fogFactor : TEXCOORD4;
+    float3 tangent : TEXCOORD2; // tangent.x, bitangent.x, normal.x
+    float3 bitangent : TEXCOORD5; // tangent.x, bitangent.x, normal.x
 };
 
 float _Tess;
@@ -28,11 +36,12 @@ struct TessellationFactors
     float inside : SV_InsideTessFactor;
 };
 
-struct Attributes
+struct Attributes2
 {
     float4 vertex : POSITION;
     float3 normal : NORMAL;
     float2 uv : TEXCOORD0;    
+    float4 tangent : TANGENT;
 };
 
 struct ControlPoint
@@ -40,6 +49,7 @@ struct ControlPoint
     float4 vertex : INTERNALTESSPOS;
     float2 uv : TEXCOORD0;
     float3 normal : NORMAL;   
+    float4 tangent : TANGENT;
 };
 
 [UNITY_domain("tri")]
@@ -52,7 +62,7 @@ ControlPoint hull(InputPatch<ControlPoint, 3> patch, uint id : SV_OutputControlP
     return patch[id];
 }
 
-TessellationFactors UnityCalcTriEdgeTessFactors (float3 triVertexFactors)
+TessellationFactors UnityCalcTriEdgeTessFactors(float3 triVertexFactors)
 {
     TessellationFactors tess;
     tess.edge[0] = 0.5 * (triVertexFactors.y + triVertexFactors.z);
@@ -64,20 +74,20 @@ TessellationFactors UnityCalcTriEdgeTessFactors (float3 triVertexFactors)
 
 float CalcDistanceTessFactor(float4 vertex, float minDist, float maxDist, float tess)
 {
-				float3 worldPosition = mul(unity_ObjectToWorld, vertex).xyz;
-				float dist = distance(worldPosition, _WorldSpaceCameraPos);
-				float f = clamp(1.0 - (dist - minDist) / (maxDist - minDist), 0.01, 1.0);
-				return f * tess;
+    float3 worldPosition = mul(unity_ObjectToWorld, vertex).xyz;
+    float dist = distance(worldPosition, _WorldSpaceCameraPos);
+    float f = clamp(1.0 - (dist - minDist) / maxDist, 0, 1.0);
+    return f * tess + 1;
 }
 
 TessellationFactors DistanceBasedTess(float4 v0, float4 v1, float4 v2, float minDist, float maxDist, float tess)
 {
-				float3 f;
-				f.x = CalcDistanceTessFactor(v0, minDist, maxDist, tess);
-				f.y = CalcDistanceTessFactor(v1, minDist, maxDist, tess);
-				f.z = CalcDistanceTessFactor(v2, minDist, maxDist, tess);
+    float3 f;
+    f.x = CalcDistanceTessFactor(v0, minDist, maxDist, tess);
+    f.y = CalcDistanceTessFactor(v1, minDist, maxDist, tess);
+    f.z = CalcDistanceTessFactor(v2, minDist, maxDist, tess);
 
-				return UnityCalcTriEdgeTessFactors(f);
+    return UnityCalcTriEdgeTessFactors(f);
 }
 
 uniform float3 _Position;
@@ -93,27 +103,28 @@ TessellationFactors patchConstantFunction(InputPatch<ControlPoint, 3> patch)
     float maxDist = _MaxTessDistance;
     TessellationFactors f;
     return DistanceBasedTess(patch[0].vertex, patch[1].vertex, patch[2].vertex, minDist, maxDist, _Tess);
-   
 }
 
-float4 GetShadowPositionHClip(Attributes input)
+float4 GetShadowPositionHClip2(Attributes2 input)
 {
     float3 positionWS = TransformObjectToWorld(input.vertex.xyz);
-    float3 normalWS = TransformObjectToWorldNormal(input.normal);
- 
-    float4 positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, 0));
- 
-#if UNITY_REVERSED_Z
-    positionCS.z = min(positionCS.z, positionCS.w * UNITY_NEAR_CLIP_VALUE);
+    float3 normalWS = (input.normal);
+
+#if _CASTING_PUNCTUAL_LIGHT_SHADOW
+    float3 lightDirectionWS = normalize(_LightPosition - positionWS);
 #else
-    positionCS.z = max(positionCS.z, positionCS.w * UNITY_NEAR_CLIP_VALUE);
+    float3 lightDirectionWS = _LightDirection;
 #endif
+
+    float4 positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, 1));
+    positionCS = ApplyShadowClamping(positionCS);
     return positionCS;
 }
 
-Varyings vert(Attributes input)
+
+Varyings2 vert(Attributes2 input)
 {
-    Varyings output;
+    Varyings2 output;
     
     float3 worldPosition = mul(unity_ObjectToWorld, input.vertex).xyz;
     //create local uv
@@ -124,15 +135,15 @@ Varyings vert(Attributes input)
     // Effects RenderTexture Reading
     float4 RTEffect = tex2Dlod(_GlobalEffectRT, float4(uv, 0, 0));
     // smoothstep to prevent bleeding
-   	RTEffect *=  smoothstep(0.99, 0.9, uv.x) * smoothstep(0.99, 0.9,1- uv.x);
-	RTEffect *=  smoothstep(0.99, 0.9, uv.y) * smoothstep(0.99, 0.9,1- uv.y);
+ 	RTEffect *= smoothstep(0.99, 0.9, uv.x) * smoothstep(0.99, 0.9,1- uv.x);
+    RTEffect *= smoothstep(0.99, 0.9, uv.y) * smoothstep(0.99, 0.9,1- uv.y);
     
     // worldspace noise texture
     float SnowNoise = tex2Dlod(_Noise, float4(worldPosition.xz * _NoiseScale, 0, 0)).r;
-    output.viewDir = SafeNormalize(GetCameraPositionWS() - worldPosition);
 
 	// move vertices up where snow is
-	input.vertex.xyz += SafeNormalize(input.normal) * saturate(( _SnowHeight) + (SnowNoise * _NoiseWeight)) * saturate(1-(RTEffect.g * _SnowDepth));
+	input.vertex.xyz += SafeNormalize(input.normal) * saturate(_SnowHeight + SnowNoise * _NoiseWeight) * saturate(1 - RTEffect.g * _SnowDepth);
+    // input.vertex.xyz +=  step(0.5,RTEffect.g) * input.normal;
 
     // transform to clip space
     #ifdef SHADERPASS_SHADOWCASTER
@@ -143,16 +154,19 @@ Varyings vert(Attributes input)
 
     //outputs
     output.worldPos =  mul(unity_ObjectToWorld, input.vertex).xyz;
+    output.viewDir = SafeNormalize(GetCameraPositionWS() - output.worldPos);
     output.normal = input.normal;
+    output.tangent = input.tangent;
+    output.bitangent = cross(input.tangent, output.normal);
     output.uv = input.uv;
     output.fogFactor = ComputeFogFactor(output.vertex.z);
     return output;
 }
 
 [UNITY_domain("tri")]
-Varyings domain(TessellationFactors factors, OutputPatch<ControlPoint, 3> patch, float3 barycentricCoordinates : SV_DomainLocation)
+Varyings2 domain(TessellationFactors factors, OutputPatch<ControlPoint, 3> patch, float3 barycentricCoordinates : SV_DomainLocation)
 {
-    Attributes v;
+    Attributes2 v;
     
     #define Interpolate(fieldName) v.fieldName = \
 				patch[0].fieldName * barycentricCoordinates.x + \
@@ -162,6 +176,7 @@ Varyings domain(TessellationFactors factors, OutputPatch<ControlPoint, 3> patch,
     Interpolate(vertex)
     Interpolate(uv)
     Interpolate(normal)
+    Interpolate(tangent)
     
     return vert(v);
 }

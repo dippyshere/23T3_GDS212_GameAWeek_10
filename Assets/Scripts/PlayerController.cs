@@ -6,9 +6,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.Cinemachine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    static readonly int Grounded = Animator.StringToHash("Grounded");
+    static readonly int Jump = Animator.StringToHash("Jump");
+    static readonly int Attack1 = Animator.StringToHash("Attack");
+    static readonly int Run = Animator.StringToHash("Run");
+    static readonly int Walk = Animator.StringToHash("Walk");
+    static readonly int RunSpeedMult = Animator.StringToHash("RunSpeedMult");
+    static readonly int WalkSpeedMult = Animator.StringToHash("WalkSpeedMult");
+    static readonly int Die = Animator.StringToHash("Die");
+    static readonly int Death = Animator.StringToHash("Death");
+    static readonly int Damage = Animator.StringToHash("TakeDamage");
+
     [Header("Configuration")]
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private Transform groundCheck;
@@ -28,7 +40,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform visualTransform;
     [SerializeField] private ParticleSystem sandTrailParticle;
-    [SerializeField] private CinemachineFreeLook freeLookCamera;
+    [SerializeField] private CinemachineInputAxisController freeLookCamera;
     [Header("UI References")]
     [SerializeField] private Image healthBar;
     [SerializeField] private Image waterBar;
@@ -61,8 +73,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rigidBody;
     private Vector3 direction;
     private Vector3 moveDirection = Vector3.forward;
-    private float horizontalInput;
-    private float verticalInput;
     private bool canMove = true;
     private float nextAttackTime = 0f;
     private GameObject interactingChest;
@@ -78,6 +88,15 @@ public class PlayerController : MonoBehaviour
     public float gems = 0f;
     private List<GemTradeType> gemInventory = new List<GemTradeType>();
 
+    Camera _mainCamera;
+
+    InputAction moveAction;
+    InputAction jumpAction;
+    InputAction sprintAction;
+    InputAction attackAction;
+    InputAction menuAction;
+    InputAction interactAction;
+
     void Start()
     {
         rigidBody = transform.GetComponent<Rigidbody>();
@@ -91,16 +110,21 @@ public class PlayerController : MonoBehaviour
         {
             gold = PlayerPrefs.GetFloat("gold");
         }
+        _mainCamera = Camera.main;
+        moveAction = InputSystem.actions.FindAction("Move");
+        jumpAction = InputSystem.actions.FindAction("Jump");
+        sprintAction = InputSystem.actions.FindAction("Sprint");
+        attackAction = InputSystem.actions.FindAction("Attack");
+        menuAction = InputSystem.actions.FindAction("Menu");
+        interactAction = InputSystem.actions.FindAction("Interact");
     }
 
     void Update()
     {
-        direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical")).normalized;
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        direction = moveAction.ReadValue<Vector2>();
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
 
-        animator.SetBool("Grounded", isGrounded);
+        animator.SetBool(Grounded, isGrounded);
         if (isGrounded)
         {
             if (!sandTrailParticle.isEmitting)
@@ -113,16 +137,16 @@ public class PlayerController : MonoBehaviour
             sandTrailParticle.Stop();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && canMove)
+        if (jumpAction.WasPressedThisFrame() && isGrounded && canMove)
         {
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            animator.SetBool("Jump", true);
+            animator.SetBool(Jump, true);
         }
-        if (Input.GetMouseButtonDown(0) && canMove)
+        if (attackAction.WasPressedThisFrame() && canMove)
         {
             if (Time.time >= nextAttackTime)
             {
-                animator.SetBool("Attack", true);
+                animator.SetBool(Attack1, true);
                 nextAttackTime = Time.time + 1f / attackRate;
                 Attack();
             }
@@ -131,25 +155,23 @@ public class PlayerController : MonoBehaviour
         {
             visualTransform.rotation = Quaternion.Slerp(visualTransform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * 10f);
         }
-        if (Input.GetKey(KeyCode.Tab) && canMove)
+        if (menuAction.IsPressed() && canMove)
         {
             inventoryUI.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            freeLookCamera.m_XAxis.m_InputAxisName = "";
-            freeLookCamera.m_YAxis.m_InputAxisName = "";
-            freeLookCamera.m_XAxis.m_InputAxisValue = 0;
-            freeLookCamera.m_YAxis.m_InputAxisValue = 0;
+            freeLookCamera.Controllers[0].Enabled = false;
+            freeLookCamera.Controllers[1].Enabled = false;
         }
         else if (canMove)
         {
             inventoryUI.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            freeLookCamera.m_XAxis.m_InputAxisName = "Mouse X";
-            freeLookCamera.m_YAxis.m_InputAxisName = "Mouse Y";
+            freeLookCamera.Controllers[0].Enabled = true;
+            freeLookCamera.Controllers[1].Enabled = true;
         }
-        if (interactingChest != null || interactingTrade != null || interactingWater != null || interactingConvenience != null)
+        if (interactingChest || interactingTrade || interactingWater || interactingConvenience)
         {
             interactionUI.SetActive(true);
         }
@@ -157,24 +179,24 @@ public class PlayerController : MonoBehaviour
         {
             interactionUI.SetActive(false);
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (interactAction.WasPressedThisFrame())
         {
-            if (interactingChest != null)
+            if (interactingChest)
             {
                 interactingChest.GetComponent<Chest>().OpenChest();
                 interactingChest = null;
             }
-            if (interactingTrade != null)
+            if (interactingTrade)
             {
                 OpenTradeGemUI();
                 interactingTrade = null;
             }
-            if (interactingWater != null)
+            if (interactingWater)
             {
                 OpenReplenishUI();
                 interactingWater = null;
             }
-            if (interactingConvenience != null)
+            if (interactingConvenience)
             {
                 OpenConvenienceUI();
                 interactingConvenience = null;
@@ -186,7 +208,7 @@ public class PlayerController : MonoBehaviour
             //}
         }
         UpdateUI();
-        interactionUI.transform.LookAt(Camera.main.transform);
+        interactionUI.transform.LookAt(_mainCamera.transform);
     }
 
     void FixedUpdate()
@@ -199,11 +221,11 @@ public class PlayerController : MonoBehaviour
 
         if (isRunning && canMove)
         {
-            if (Input.GetKey(KeyCode.LeftShift) && water >= 0)
+            if (sprintAction.IsPressed() && water >= 0)
             {
                 speed = moveSpeed * runMultiplier;
-                animator.SetBool("Run", true);
-                animator.SetBool("Walk", false);
+                animator.SetBool(Run, true);
+                animator.SetBool(Walk, false);
                 if (water > 0)
                 {
                     water -= Time.deltaTime * waterDrainRateRun;
@@ -212,31 +234,31 @@ public class PlayerController : MonoBehaviour
             else
             {
                 speed = moveSpeed * walkMultiplier;
-                animator.SetBool("Run", false);
-                animator.SetBool("Walk", true);
+                animator.SetBool(Run, false);
+                animator.SetBool(Walk, true);
             }
-            Vector3 viewDir = transform.position - Camera.main.transform.position;
+            Vector3 viewDir = transform.position - _mainCamera.transform.position;
             viewDir.y = 0;
             orientation.forward = viewDir.normalized;
             Quaternion targetRotation = Quaternion.LookRotation(viewDir);
             orientation.rotation = targetRotation;
-            moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-            rigidBody.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+            moveDirection = orientation.forward * moveAction.ReadValue<Vector2>().y + orientation.right * moveAction.ReadValue<Vector2>().x;
+            rigidBody.AddForce(moveDirection.normalized * (speed * 10f), ForceMode.Force);
             
             //rigidBody.MovePosition(rigidBody.position + moveDirection * (speed * Time.fixedDeltaTime));
 
-            animator.SetFloat("RunSpeedMult", direction.magnitude * rigidBody.linearVelocity.magnitude * runVisualMultiplier);
-            animator.SetFloat("WalkSpeedMult", direction.magnitude * rigidBody.linearVelocity.magnitude * walkVisualMultiplier);
+            animator.SetFloat(RunSpeedMult, direction.magnitude * rigidBody.linearVelocity.magnitude * runVisualMultiplier);
+            animator.SetFloat(WalkSpeedMult, direction.magnitude * rigidBody.linearVelocity.magnitude * walkVisualMultiplier);
         }
         else
         {
-            animator.SetBool("Run", false);
-            animator.SetBool("Walk", false);
+            animator.SetBool(Run, false);
+            animator.SetBool(Walk, false);
         }
 
         if (rigidBody.linearVelocity.y <= 0)
         {
-            animator.SetBool("Jump", false);
+            animator.SetBool(Jump, false);
         }
     }
 
@@ -265,24 +287,22 @@ public class PlayerController : MonoBehaviour
         health -= damageDealt;
         if (health <= 0)
         {
-            animator.SetTrigger("Die");
+            animator.SetTrigger(Die);
             canMove = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            freeLookCamera.m_XAxis.m_InputAxisName = "";
-            freeLookCamera.m_YAxis.m_InputAxisName = "";
-            freeLookCamera.m_XAxis.m_InputAxisValue = 0;
-            freeLookCamera.m_YAxis.m_InputAxisValue = 0;
+            freeLookCamera.Controllers[0].Enabled = false;
+            freeLookCamera.Controllers[1].Enabled = false;
             PlayerPrefs.SetFloat("gems", gems);
             PlayerPrefs.SetFloat("gold", gold);
             deathUI.SetActive(true);
-            deathGold.text = gold.ToString();
-            deathUI.GetComponent<Animator>().SetBool("Death", true);
-            Invoke("ReloadScene", 2.1f);
+            deathGold.text = gold.ToString(CultureInfo.InvariantCulture);
+            deathUI.GetComponent<Animator>().SetBool(Death, true);
+            Invoke(nameof(ReloadScene), 2.1f);
         }
         else
         {
-            animator.SetBool("TakeDamage", true);
+            animator.SetBool(Damage, true);
             Debug.Log("Player health: " + health);
         }
     }
@@ -340,7 +360,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public int WaterReplenishCost(bool convenience)
+    int WaterReplenishCost(bool convenience)
     {
         if (convenience)
         {
@@ -354,7 +374,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void ReplenishWater()
+    void ReplenishWater()
     {
         water = 100;
     }
@@ -370,7 +390,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Added " + gemType);
     }
 
-    public int TradeGemsValue(bool convenience)
+    int TradeGemsValue(bool convenience)
     {
         int goldToAdd = 0;
         foreach (GemTradeType gemType in gemInventory)
@@ -427,21 +447,25 @@ public class PlayerController : MonoBehaviour
     public void BuyWater(bool convenience)
     {
         int cost = WaterReplenishCost(convenience);
-        if (gold >= cost)
+        if (!(gold >= cost))
         {
-            gold -= cost;
-            ReplenishWater();
+            return;
         }
+
+        gold -= cost;
+        ReplenishWater();
     }
 
     public void SellGems(bool convenience)
     {
         int value = TradeGemsValue(convenience);
-        if (value > 0)
+        if (value <= 0)
         {
-            gold += value;
-            gemInventory.Clear();
+            return;
         }
+
+        gold += value;
+        gemInventory.Clear();
     }
 
     public void CloseUI()
@@ -452,8 +476,8 @@ public class PlayerController : MonoBehaviour
         canMove = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        freeLookCamera.m_XAxis.m_InputAxisName = "Mouse X";
-        freeLookCamera.m_YAxis.m_InputAxisName = "Mouse Y";
+        freeLookCamera.Controllers[0].Enabled = true;
+        freeLookCamera.Controllers[1].Enabled = true;
     }
 
     public void OpenTradeGemUI()
@@ -462,10 +486,8 @@ public class PlayerController : MonoBehaviour
         canMove = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        freeLookCamera.m_XAxis.m_InputAxisName = "";
-        freeLookCamera.m_YAxis.m_InputAxisName = "";
-        freeLookCamera.m_XAxis.m_InputAxisValue = 0;
-        freeLookCamera.m_YAxis.m_InputAxisValue = 0;
+        freeLookCamera.Controllers[0].Enabled = false;
+        freeLookCamera.Controllers[1].Enabled = false;
     }
 
     public void OpenReplenishUI()
@@ -474,10 +496,8 @@ public class PlayerController : MonoBehaviour
         canMove = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        freeLookCamera.m_XAxis.m_InputAxisName = "";
-        freeLookCamera.m_YAxis.m_InputAxisName = "";
-        freeLookCamera.m_XAxis.m_InputAxisValue = 0;
-        freeLookCamera.m_YAxis.m_InputAxisValue = 0;
+        freeLookCamera.Controllers[0].Enabled = false;
+        freeLookCamera.Controllers[1].Enabled = false;
     }
 
     public void OpenConvenienceUI()
@@ -486,10 +506,8 @@ public class PlayerController : MonoBehaviour
         canMove = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        freeLookCamera.m_XAxis.m_InputAxisName = "";
-        freeLookCamera.m_YAxis.m_InputAxisName = "";
-        freeLookCamera.m_XAxis.m_InputAxisValue = 0;
-        freeLookCamera.m_YAxis.m_InputAxisValue = 0;
+        freeLookCamera.Controllers[0].Enabled = false;
+        freeLookCamera.Controllers[1].Enabled = false;
     }
 
     public void CloseGameAndClearSaved()

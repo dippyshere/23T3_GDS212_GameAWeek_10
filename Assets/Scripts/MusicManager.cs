@@ -24,12 +24,14 @@ public class MusicManager : MonoBehaviour
             for (int i = 0; i < settlementBoundaries.Length; i++)
             {
                 Collider settlementCollider = settlementBoundaries[i].GetComponent<Collider>();
-                if (settlementCollider.bounds.Contains(player.transform.position))
+                if (!settlementCollider.bounds.Contains(player.transform.position))
                 {
-                    currentTrackIndex = i;
-                    SetMusicTrackForPlayer();
-                    return;
+                    continue;
                 }
+
+                currentTrackIndex = i;
+                SetMusicTrackForPlayer();
+                return;
             }
         }
 
@@ -45,31 +47,37 @@ public class MusicManager : MonoBehaviour
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-        if (player != null)
+        if (!player)
         {
-            bool nearSettlement = false;
-
-            for (int i = 0; i < settlementBoundaries.Length; i++)
-            {
-                Collider settlementCollider = settlementBoundaries[i].GetComponent<Collider>();
-                if (settlementCollider.bounds.Contains(player.transform.position))
-                {
-                    nearSettlement = true;
-                    if (i != currentTrackIndex)
-                    {
-                        currentTrackIndex = i;
-                        StartCoroutine(TransitionToSettlementTrack());
-                    }
-                    break;
-                }
-            }
-
-            if (!nearSettlement && currentTrackIndex != -1)
-            {
-                currentTrackIndex = -1;
-                StartCoroutine(TransitionToDesertTrack());
-            }
+            return;
         }
+
+        bool nearSettlement = false;
+
+        for (int i = 0; i < settlementBoundaries.Length; i++)
+        {
+            Collider settlementCollider = settlementBoundaries[i].GetComponent<Collider>();
+            if (!settlementCollider.bounds.Contains(player.transform.position))
+            {
+                continue;
+            }
+
+            nearSettlement = true;
+            if (i != currentTrackIndex)
+            {
+                currentTrackIndex = i;
+                StartCoroutine(TransitionToSettlementTrack());
+            }
+            break;
+        }
+
+        if (nearSettlement || currentTrackIndex == -1)
+        {
+            return;
+        }
+
+        currentTrackIndex = -1;
+        StartCoroutine(TransitionToDesertTrack());
     }
 
     private IEnumerator TransitionToSettlementTrack()

@@ -4,21 +4,45 @@ using UnityEngine;
 
 public class SetInteractiveShaderEffects : MonoBehaviour
 {
+    static readonly int GlobalEffectRT = Shader.PropertyToID("_GlobalEffectRT");
+    static readonly int OrthographicCamSize = Shader.PropertyToID("_OrthographicCamSize");
+    static readonly int Position = Shader.PropertyToID("_Position");
+
     [SerializeField]
     RenderTexture rt;
     [SerializeField]
     Transform target;
+
+    [SerializeField]
+    float yOffset = 20f;
+
+    [SerializeField]
+    Camera m_cam;
     // Start is called before the first frame update
     void Awake()
     {
-        Shader.SetGlobalTexture("_GlobalEffectRT", rt);
-        Shader.SetGlobalFloat("_OrthographicCamSize", GetComponent<Camera>().orthographicSize);
+        if (m_cam == null)
+        {
+            m_cam = GetComponent<Camera>();
+        }
+        Shader.SetGlobalTexture(GlobalEffectRT, rt);
+        Shader.SetGlobalFloat(OrthographicCamSize, m_cam.orthographicSize);
     }
 
     private void Update()
     {
-        transform.position = new Vector3(target.transform.position.x, target.transform.position.y + 50f, target.transform.position.z);
-        Shader.SetGlobalVector("_Position", transform.position);
+        // more stable version thanks to NoveLL
+         // calculate render texture pixel size in world space
+        float pixelSize = 2.0f * m_cam.orthographicSize / rt.height;
+
+        // round the camera's position to the nearest pixel
+        Vector3 targetPosition = new Vector3(
+            Mathf.Round(target.position.x / pixelSize) * pixelSize, 
+            Mathf.Round((target.position.y + yOffset) / pixelSize) * pixelSize,
+            Mathf.Round(target.position.z / pixelSize) * pixelSize);
+
+        transform.position = targetPosition;
+        Shader.SetGlobalVector(Position, transform.position);
     }
 
 

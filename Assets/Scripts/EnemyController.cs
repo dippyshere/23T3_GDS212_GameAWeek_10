@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
+    static readonly int Property = Animator.StringToHash("Walk Forward");
+    static readonly int Property1 = Animator.StringToHash("Stab Attack");
+    static readonly int Die = Animator.StringToHash("Die");
+    static readonly int Property2 = Animator.StringToHash("Take Damage");
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private float health = 100f;
@@ -22,46 +26,44 @@ public class EnemyController : MonoBehaviour
     private float nextAttackTime = 0f;
     private float nextDamageTime = 0f;
 
+    Camera _mainCamera;
+
     // Start is called before the first frame update
     void Start()
     {
         homePosition = transform;
         agent.SetDestination(homePosition.position);
         healthBarCanvas.SetActive(false);
+        _mainCamera = Camera.main;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (agent.remainingDistance <= agent.stoppingDistance)
+        animator.SetBool(Property, !(agent.remainingDistance <= agent.stoppingDistance));
+        if (!player)
         {
-            animator.SetBool("Walk Forward", false);
+            return;
+        }
+
+        if (Vector3.Distance(homePosition.position, player.transform.position) <= movementRange)
+        {
+            agent.SetDestination(player.transform.position);
+            healthBar.fillAmount = 1 - (health / 100);
+            if (Vector3.Distance(attackPoint.position, player.transform.position) <= attackRange)
+            {
+                if (Time.time >= nextAttackTime)
+                {
+                    nextAttackTime = Time.time + 1f / attackRate;
+                    animator.SetBool(Property1, true);
+                    Attack();
+                }
+            }
+            healthBarCanvas.transform.LookAt(_mainCamera.transform);
         }
         else
         {
-            animator.SetBool("Walk Forward", true);
-        }
-        if (player != null)
-        {
-            if (Vector3.Distance(homePosition.position, player.transform.position) <= movementRange)
-            {
-                agent.SetDestination(player.transform.position);
-                healthBar.fillAmount = 1 - (health / 100);
-                if (Vector3.Distance(attackPoint.position, player.transform.position) <= attackRange)
-                {
-                    if (Time.time >= nextAttackTime)
-                    {
-                        nextAttackTime = Time.time + 1f / attackRate;
-                        animator.SetBool("Stab Attack", true);
-                        Attack();
-                    }
-                }
-                healthBarCanvas.transform.LookAt(Camera.main.transform);
-            }
-            else
-            {
-                agent.SetDestination(homePosition.position);
-            }
+            agent.SetDestination(homePosition.position);
         }
     }
 
@@ -75,7 +77,7 @@ public class EnemyController : MonoBehaviour
         health -= damageDealt;
         if (health <= 0)
         {
-            animator.SetTrigger("Die");
+            animator.SetTrigger(Die);
             Destroy(gameObject, 1.3f);
             // move trail particle systems to separate game object to prevent it from being destroyed
             ParticleSystem[] particleSystems = GetComponentsInChildren<ParticleSystem>();
@@ -86,7 +88,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            animator.SetBool("Take Damage", true);
+            animator.SetBool(Property2, true);
             Debug.Log("Enemy health: " + health);
         }
     }
@@ -108,25 +110,33 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!other.CompareTag("Player"))
         {
-            if (other.gameObject.GetComponent<PlayerController>() != null)
-            {
-                player = other.gameObject;
-                healthBarCanvas.SetActive(true);
-            }
+            return;
         }
+
+        if (other.gameObject.GetComponent<PlayerController>() == null)
+        {
+            return;
+        }
+
+        player = other.gameObject;
+        healthBarCanvas.SetActive(true);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!other.CompareTag("Player"))
         {
-            if (other.gameObject.GetComponent<PlayerController>() != null)
-            {
-                player = null;
-                healthBarCanvas.SetActive(false);
-            }
+            return;
         }
+
+        if (other.gameObject.GetComponent<PlayerController>() == null)
+        {
+            return;
+        }
+
+        player = null;
+        healthBarCanvas.SetActive(false);
     }
 }

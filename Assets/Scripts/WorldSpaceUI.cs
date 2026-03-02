@@ -24,20 +24,13 @@ public class WorldSpaceUI : MonoBehaviour
         float distance = Vector3.Distance(transform.position, player.position);
 
         // Adjust UI visibility based on distance.
-        if (distance <= activationDistance)
-        {
-            SetVisibility(true);
-        }
-        else
-        {
-            SetVisibility(false);
-        }
+        SetVisibility(distance <= activationDistance);
     }
 
     private void SetVisibility(bool isVisible)
     {
         // Set the visibility of the Text element if a reference is provided.
-        if (textElement != null)
+        if (textElement)
         {
             textElement.enabled = isVisible;
         }

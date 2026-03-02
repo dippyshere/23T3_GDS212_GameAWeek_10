@@ -13,7 +13,7 @@ public class TextUtility : MonoBehaviour
         ActivateTextGroup(currentGroupIndex);
     }
 
-    public void NextGroup()
+    void NextGroup()
     {
         // Hide the current group
         DeactivateTextGroup(currentGroupIndex);

@@ -37,7 +37,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _MaxTessDistance: 100
+    - _MaxTessDistance: 30
     - _NoiseScale: 0.09
     - _NoiseWeight: 0.01
     - _PathBlending: 3
@@ -48,7 +48,7 @@ Material:
     - _SnowTextureScale: 0.5
     - _SparkCutoff: 0.165
     - _SparkleScale: 1.32
-    - _Tess: 512
+    - _Tess: 72
     m_Colors:
     - _Color: {r: 0.8796226, g: 0.49693304, b: 0.10946172, a: 1}
     - _PathColorIn: {r: 0.22827475, g: 0.13643117, b: 0.023264745, a: 1}
