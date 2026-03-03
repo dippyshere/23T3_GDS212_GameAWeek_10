@@ -25,6 +25,7 @@ struct Varyings2
     float fogFactor : TEXCOORD4;
     float3 tangent : TEXCOORD2; // tangent.x, bitangent.x, normal.x
     float3 bitangent : TEXCOORD5; // tangent.x, bitangent.x, normal.x
+    float2 staticLightmapUV : TEXCOORD6;
 };
 
 float _Tess;
@@ -40,7 +41,8 @@ struct Attributes2
 {
     float4 vertex : POSITION;
     float3 normal : NORMAL;
-    float2 uv : TEXCOORD0;    
+    float2 uv : TEXCOORD0;
+    float2 staticLightmapUV : TEXCOORD1;
     float4 tangent : TANGENT;
 };
 
@@ -48,6 +50,7 @@ struct ControlPoint
 {
     float4 vertex : INTERNALTESSPOS;
     float2 uv : TEXCOORD0;
+    float2 staticLightmapUV : TEXCOORD1;
     float3 normal : NORMAL;   
     float4 tangent : TANGENT;
 };
@@ -159,6 +162,7 @@ Varyings2 vert(Attributes2 input)
     output.tangent = input.tangent;
     output.bitangent = cross(input.tangent, output.normal);
     output.uv = input.uv;
+    output.staticLightmapUV = input.staticLightmapUV * unity_LightmapST.xy + unity_LightmapST.zw;
     output.fogFactor = ComputeFogFactor(output.vertex.z);
     return output;
 }
@@ -175,6 +179,7 @@ Varyings2 domain(TessellationFactors factors, OutputPatch<ControlPoint, 3> patch
 
     Interpolate(vertex)
     Interpolate(uv)
+    Interpolate(staticLightmapUV)
     Interpolate(normal)
     Interpolate(tangent)
     

@@ -1,4 +1,4 @@
-Shader "Custom/Snow Interactive"
+Shader "Custom/Snow Interactive NoTess"
 {
     Properties
     {
@@ -36,33 +36,6 @@ Shader "Custom/Snow Interactive"
         _RimPower("Rim Power", Range(0,20)) = 20
         [HDR]_RimColor("Rim Color Snow", Color) = (0.5,0.5,0.5,1)
     }
-    HLSLINCLUDE
-    // Includes
-
-    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
-    #include "SnowTessellation.hlsl"
-    #pragma instancing_options renderinglayer
-    // Keywords
-
-    #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
-    #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
-    #pragma multi_compile _ _SHADOWS_SOFT
-    #pragma multi_compile_fog
-    #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
-
-    ControlPoint TessellationVertexProgram(Attributes2 v)
-    {
-        ControlPoint p;
-        p.vertex = v.vertex;
-        p.uv = v.uv;
-        p.staticLightmapUV = v.staticLightmapUV;
-        p.normal = v.normal;
-        p.tangent = v.tangent;
-        return p;
-    }
-    ENDHLSL
 
     SubShader
     {
@@ -71,6 +44,95 @@ Shader "Custom/Snow Interactive"
             "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"
         }
 
+        HLSLINCLUDE
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
+
+        // Shadow Casting Light geometric parameters
+        float3 _LightDirection;
+        float3 _LightPosition;
+
+        uniform float3 _Position;
+        uniform sampler2D _GlobalEffectRT;
+        uniform float _OrthographicCamSize;
+
+        sampler2D _Noise;
+        float _NoiseScale, _SnowHeight, _NoiseWeight, _SnowDepth;
+        float _Tess, _MaxTessDistance;
+
+        struct Attributes
+        {
+            float4 vertex : POSITION;
+            float3 normal : NORMAL;
+            float2 uv : TEXCOORD0;
+            float2 staticLightmapUV : TEXCOORD1;
+            float4 tangent : TANGENT;
+        };
+
+        struct Varyings
+        {
+            float4 positionCS : SV_POSITION;
+            float3 worldPos : TEXCOORD0;
+            float2 uv : TEXCOORD1;
+            float3 normal : TEXCOORD2;
+            float3 viewDir : TEXCOORD3;
+            float fogFactor : TEXCOORD4;
+            float3 tangent : TEXCOORD5;
+            float3 bitangent : TEXCOORD6;
+            float2 staticLightmapUV : TEXCOORD7;
+        };
+
+        Varyings SnowVert(Attributes input)
+        {
+            Varyings output = (Varyings)0;
+
+            float3 worldPosition = mul(unity_ObjectToWorld, input.vertex).xyz;
+
+            // create local uv for effect RT
+            float2 uv = worldPosition.xz - _Position.xz;
+            uv = uv / (_OrthographicCamSize * 2);
+            uv += 0.5;
+
+            // Effects RenderTexture Reading
+            float4 RTEffect = tex2Dlod(_GlobalEffectRT, float4(uv, 0, 0));
+            RTEffect *= smoothstep(0.99, 0.9, uv.x) * smoothstep(0.99, 0.9, 1 - uv.x);
+            RTEffect *= smoothstep(0.99, 0.9, uv.y) * smoothstep(0.99, 0.9, 1 - uv.y);
+
+            // worldspace noise texture
+            float SnowNoise = tex2Dlod(_Noise, float4(worldPosition.xz * _NoiseScale, 0, 0)).r;
+
+            // move vertices up where snow is
+            input.vertex.xyz += SafeNormalize(input.normal) * saturate(_SnowHeight + SnowNoise * _NoiseWeight) * saturate(1 - RTEffect.g * _SnowDepth);
+
+            // transform to clip space
+            #ifdef SHADERPASS_SHADOWCASTER
+                float3 positionWS = TransformObjectToWorld(input.vertex.xyz);
+                float3 normalWS = input.normal;
+                #if _CASTING_PUNCTUAL_LIGHT_SHADOW
+                    float3 lightDirectionWS = normalize(_LightPosition - positionWS);
+                #else
+                    float3 lightDirectionWS = _LightDirection;
+                #endif
+                output.positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, 1));
+                output.positionCS = ApplyShadowClamping(output.positionCS);
+            #else
+                output.positionCS = TransformObjectToHClip(input.vertex.xyz);
+            #endif
+
+            output.worldPos = mul(unity_ObjectToWorld, input.vertex).xyz;
+            output.viewDir = SafeNormalize(GetCameraPositionWS() - output.worldPos);
+            output.normal = input.normal;
+            output.tangent = input.tangent.xyz;
+            output.bitangent = cross(input.tangent.xyz, output.normal);
+            output.uv = input.uv;
+            output.staticLightmapUV = input.staticLightmapUV * unity_LightmapST.xy + unity_LightmapST.zw;
+            output.fogFactor = ComputeFogFactor(output.positionCS.z);
+            return output;
+        }
+        ENDHLSL
+
+        // Forward Pass
         Pass
         {
             Tags
@@ -79,15 +141,16 @@ Shader "Custom/Snow Interactive"
             }
 
             HLSLPROGRAM
-            // vertex happens in snowtessellation.hlsl
-            #pragma vertex TessellationVertexProgram
-            #pragma hull hull
-            #pragma domain domain
-            #pragma require tessellation tessHW
+            #pragma vertex SnowVert
             #pragma fragment frag
-            #pragma target 4.0
+            #pragma target 3.0
+            #pragma instancing_options renderinglayer
 
-            // Lightmap keywords
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #pragma multi_compile _ _SHADOWS_SOFT
+            #pragma multi_compile_fog
+            #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
             #pragma multi_compile _ LIGHTMAP_ON
             #pragma multi_compile _ DIRLIGHTMAP_COMBINED
             #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
@@ -102,10 +165,9 @@ Shader "Custom/Snow Interactive"
             float _SnowTextureOpacity, _SnowTextureScale;
             float4 _ShadowColor;
 
-            half4 frag(Varyings2 IN) : SV_Target
+            half4 frag(Varyings IN) : SV_Target
             {
                 // Effects RenderTexture Reading
-                float3 worldPosition = mul(unity_ObjectToWorld, IN.vertex).xyz;
                 float2 uv = IN.worldPos.xz - _Position.xz;
                 uv /= _OrthographicCamSize * 2;
                 uv += 0.5;
@@ -123,15 +185,15 @@ Shader "Custom/Snow Interactive"
                 // worldspace Snow texture
                 float3 snowtexture = tex2D(_MainTex, IN.worldPos.xz * _SnowTextureScale).rgb;
 
-                //lerp between snow color and snow texture
+                // lerp between snow color and snow texture
                 float3 snowTex = lerp(_Color.rgb, snowtexture * _Color.rgb, _SnowTextureOpacity);
 
-                //lerp the colors using the RT effect path
+                // lerp the colors using the RT effect path
                 float3 path = lerp(_PathColorOut.rgb * effect.g, _PathColorIn.rgb, saturate(effect.g * _PathBlending));
                 float3 mainColors = lerp(snowTex, path, saturate(effect.g));
 
                 // Baked GI / ambient lighting
-                half3 bakedGI = half3(0,0,0);
+                half3 bakedGI = half3(0, 0, 0);
                 #if defined(LIGHTMAP_ON)
                     bakedGI = SampleLightmap(IN.staticLightmapUV, IN.normal);
                 #else
@@ -139,7 +201,7 @@ Shader "Custom/Snow Interactive"
                 #endif
 
                 // Shadow mask for baked shadow support
-                half4 shadowMask = half4(1,1,1,1);
+                half4 shadowMask = half4(1, 1, 1, 1);
                 #if defined(SHADOWS_SHADOWMASK) && defined(LIGHTMAP_ON)
                     shadowMask = SAMPLE_SHADOWMASK(IN.staticLightmapUV);
                 #endif
@@ -167,7 +229,7 @@ Shader "Custom/Snow Interactive"
                 litMainColors += lerp(cutoffSparkles * 4, 0, saturate(effect.g * 2));
 
                 // add rim light
-                half rim = 1.0 - dot((IN.viewDir), IN.normal) * topdownNoise.r;
+                half rim = 1.0 - dot(IN.viewDir, IN.normal) * topdownNoise.r;
                 // no rim inside of the path
                 rim = lerp(rim, 0, saturate(effect.g));
                 litMainColors += _RimColor * pow(rim, _RimPower);
@@ -175,12 +237,7 @@ Shader "Custom/Snow Interactive"
                 // ambient and mainlight colors added
                 half4 extraColors;
                 #if defined(LIGHTMAP_ON) && defined(LIGHTMAP_SHADOW_MIXING) && !defined(SHADOWS_SHADOWMASK)
-                    // Subtractive mode: MixRealtimeAndBakedGI has already folded realtime
-                    // shadow into bakedGI and set mainLight.shadowAttenuation = 1.
-                    // Derive a baked shadow factor from the raw (pre-mix) lightmap luminance,
-                    // normalized by the main light intensity so lit areas → 1, shadow → ~0.
-                    // Then combine with the realtime shadow (captured before mixing) so both
-                    // baked and realtime shadows contribute.
+                    // Subtractive mode
                     half lightLum = max(Luminance(mainLight.color), 0.001);
                     half bakedShadow = saturate(rawBakedLum / lightLum);
                     float subtractiveShadow = min(shadow, bakedShadow);
@@ -215,14 +272,13 @@ Shader "Custom/Snow Interactive"
             ColorMask 0
 
             HLSLPROGRAM
-            #pragma vertex TessellationVertexProgram
-            #pragma hull hull
-            #pragma domain domain
+            #define SHADERPASS_SHADOWCASTER
+            #pragma vertex SnowVert
+            #pragma fragment fragShadow
             #pragma target 3.0
             #pragma multi_compile_shadowcaster
-            #pragma fragment frag
 
-            half4 frag(Varyings2 IN) : SV_Target
+            half4 fragShadow(Varyings IN) : SV_Target
             {
                 return 0;
             }
@@ -241,40 +297,11 @@ Shader "Custom/Snow Interactive"
             ColorMask R
 
             HLSLPROGRAM
-            #pragma vertex TessellationVertexProgram
-            #pragma hull hull
-            #pragma require tessellation tessHW
-            #pragma target 4.0
-            #pragma domain domainDepthOnly
-            #pragma fragment fragDepthOnly
+            #pragma vertex SnowVert
+            #pragma fragment fragDepth
+            #pragma target 3.0
 
-            Varyings2 vertDepthOnly(Attributes2 input)
-            {
-                Varyings2 output = (Varyings2)0;
-                output.vertex = TransformObjectToHClip(input.vertex.xyz);
-                output.worldPos = mul(unity_ObjectToWorld, input.vertex).xyz;
-                output.normal = TransformObjectToWorldNormal(input.normal);
-                output.uv = input.uv;
-                output.tangent = input.tangent.xyz;
-                output.bitangent = cross(input.tangent.xyz, output.normal);
-                output.viewDir = float3(0, 0, 0);
-                output.fogFactor = 0;
-                return output;
-            }
-
-            [UNITY_domain("tri")]
-            Varyings2 domainDepthOnly(TessellationFactors factors, OutputPatch<ControlPoint, 3> patch, float3 barycentricCoordinates : SV_DomainLocation)
-            {
-                Attributes2 v;
-                v.vertex = patch[0].vertex * barycentricCoordinates.x + patch[1].vertex * barycentricCoordinates.y + patch[2].vertex * barycentricCoordinates.z;
-                v.uv = patch[0].uv * barycentricCoordinates.x + patch[1].uv * barycentricCoordinates.y + patch[2].uv * barycentricCoordinates.z;
-                v.staticLightmapUV = patch[0].staticLightmapUV * barycentricCoordinates.x + patch[1].staticLightmapUV * barycentricCoordinates.y + patch[2].staticLightmapUV * barycentricCoordinates.z;
-                v.normal = patch[0].normal * barycentricCoordinates.x + patch[1].normal * barycentricCoordinates.y + patch[2].normal * barycentricCoordinates.z;
-                v.tangent = patch[0].tangent * barycentricCoordinates.x + patch[1].tangent * barycentricCoordinates.y + patch[2].tangent * barycentricCoordinates.z;
-                return vertDepthOnly(v);
-            }
-
-            half4 fragDepthOnly(Varyings2 IN) : SV_Target
+            half4 fragDepth(Varyings IN) : SV_Target
             {
                 return 0;
             }
@@ -292,40 +319,11 @@ Shader "Custom/Snow Interactive"
             ZWrite On
 
             HLSLPROGRAM
-            #pragma vertex TessellationVertexProgram
-            #pragma hull hull
-            #pragma require tessellation tessHW
-            #pragma target 4.0
-            #pragma domain domainDepthNormals
+            #pragma vertex SnowVert
             #pragma fragment fragDepthNormals
+            #pragma target 3.0
 
-            Varyings2 vertDepthNormals(Attributes2 input)
-            {
-                Varyings2 output = (Varyings2)0;
-                output.vertex = TransformObjectToHClip(input.vertex.xyz);
-                output.worldPos = mul(unity_ObjectToWorld, input.vertex).xyz;
-                output.normal = TransformObjectToWorldNormal(input.normal);
-                output.uv = input.uv;
-                output.tangent = input.tangent.xyz;
-                output.bitangent = cross(input.tangent.xyz, output.normal);
-                output.viewDir = float3(0, 0, 0);
-                output.fogFactor = 0;
-                return output;
-            }
-
-            [UNITY_domain("tri")]
-            Varyings2 domainDepthNormals(TessellationFactors factors, OutputPatch<ControlPoint, 3> patch, float3 barycentricCoordinates : SV_DomainLocation)
-            {
-                Attributes2 v;
-                v.vertex = patch[0].vertex * barycentricCoordinates.x + patch[1].vertex * barycentricCoordinates.y + patch[2].vertex * barycentricCoordinates.z;
-                v.uv = patch[0].uv * barycentricCoordinates.x + patch[1].uv * barycentricCoordinates.y + patch[2].uv * barycentricCoordinates.z;
-                v.staticLightmapUV = patch[0].staticLightmapUV * barycentricCoordinates.x + patch[1].staticLightmapUV * barycentricCoordinates.y + patch[2].staticLightmapUV * barycentricCoordinates.z;
-                v.normal = patch[0].normal * barycentricCoordinates.x + patch[1].normal * barycentricCoordinates.y + patch[2].normal * barycentricCoordinates.z;
-                v.tangent = patch[0].tangent * barycentricCoordinates.x + patch[1].tangent * barycentricCoordinates.y + patch[2].tangent * barycentricCoordinates.z;
-                return vertDepthNormals(v);
-            }
-
-            half4 fragDepthNormals(Varyings2 IN) : SV_Target
+            half4 fragDepthNormals(Varyings IN) : SV_Target
             {
                 float3 normalWS = normalize(IN.normal);
                 return half4(normalWS, 0);
@@ -333,7 +331,7 @@ Shader "Custom/Snow Interactive"
             ENDHLSL
         }
 
-        // Meta pass for lightmap baking (no tessellation)
+        // Meta pass for lightmap baking
         Pass
         {
             Name "Meta"
@@ -366,7 +364,7 @@ Shader "Custom/Snow Interactive"
                 #endif
             };
 
-            MetaVaryings MetaVert(Attributes2 input)
+            MetaVaryings MetaVert(Attributes input)
             {
                 MetaVaryings output = (MetaVaryings)0;
                 output.positionCS = MetaVertexPosition(input.vertex, input.staticLightmapUV, float2(0, 0), unity_LightmapST, unity_DynamicLightmapST);
@@ -381,7 +379,6 @@ Shader "Custom/Snow Interactive"
             half4 MetaFrag(MetaVaryings IN) : SV_Target
             {
                 MetaInput metaInput;
-                // Compute surface albedo matching the forward pass
                 float3 snowtexture = tex2D(_MainTex, IN.worldPos.xz * _SnowTextureScale).rgb;
                 float3 snowTex = lerp(_Color.rgb, snowtexture * _Color.rgb, _SnowTextureOpacity);
 
@@ -396,5 +393,4 @@ Shader "Custom/Snow Interactive"
             ENDHLSL
         }
     }
-    Fallback "Custom/Snow Interactive NoTess"
 }
