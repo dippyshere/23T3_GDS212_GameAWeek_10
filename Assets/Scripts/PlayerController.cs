@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private Rigidbody rigidBody;
     private Vector3 direction;
-    private Vector3 moveDirection = Vector3.forward;
+    private Vector3 moveDirection = Vector3.left;
     private bool canMove = true;
     private float nextAttackTime = 0f;
     private GameObject interactingChest;
@@ -209,43 +209,21 @@ public class PlayerController : MonoBehaviour
         }
         UpdateUI();
         interactionUI.transform.LookAt(_mainCamera.transform);
-    }
 
-    void FixedUpdate()
-    {
-        if (water > 0)
-        {
-            water -= Time.deltaTime * waterDrainRate;
-        }
         bool isRunning = direction.magnitude > 0.1f;
 
         if (isRunning && canMove)
         {
             if (sprintAction.IsPressed() && water >= 0)
             {
-                speed = moveSpeed * runMultiplier;
                 animator.SetBool(Run, true);
                 animator.SetBool(Walk, false);
-                if (water > 0)
-                {
-                    water -= Time.deltaTime * waterDrainRateRun;
-                }
             }
             else
             {
-                speed = moveSpeed * walkMultiplier;
                 animator.SetBool(Run, false);
                 animator.SetBool(Walk, true);
             }
-            Vector3 viewDir = transform.position - _mainCamera.transform.position;
-            viewDir.y = 0;
-            orientation.forward = viewDir.normalized;
-            Quaternion targetRotation = Quaternion.LookRotation(viewDir);
-            orientation.rotation = targetRotation;
-            moveDirection = orientation.forward * moveAction.ReadValue<Vector2>().y + orientation.right * moveAction.ReadValue<Vector2>().x;
-            rigidBody.AddForce(moveDirection.normalized * (speed * 10f), ForceMode.Force);
-            
-            //rigidBody.MovePosition(rigidBody.position + moveDirection * (speed * Time.fixedDeltaTime));
 
             animator.SetFloat(RunSpeedMult, direction.magnitude * rigidBody.linearVelocity.magnitude * runVisualMultiplier);
             animator.SetFloat(WalkSpeedMult, direction.magnitude * rigidBody.linearVelocity.magnitude * walkVisualMultiplier);
@@ -260,6 +238,40 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool(Jump, false);
         }
+    }
+
+    void FixedUpdate()
+    {
+        if (water > 0)
+        {
+            water -= Time.deltaTime * waterDrainRate;
+        }
+        bool isRunning = direction.magnitude > 0.1f;
+
+        if (!isRunning || !canMove)
+        {
+            return;
+        }
+
+        if (sprintAction.IsPressed() && water >= 0)
+        {
+            speed = moveSpeed * runMultiplier;
+            if (water > 0)
+            {
+                water -= Time.deltaTime * waterDrainRateRun;
+            }
+        }
+        else
+        {
+            speed = moveSpeed * walkMultiplier;
+        }
+        Vector3 viewDir = transform.position - _mainCamera.transform.position;
+        viewDir.y = 0;
+        orientation.forward = viewDir.normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(viewDir);
+        orientation.rotation = targetRotation;
+        moveDirection = orientation.forward * moveAction.ReadValue<Vector2>().y + orientation.right * moveAction.ReadValue<Vector2>().x;
+        rigidBody.AddForce(moveDirection.normalized * (speed * 10f), ForceMode.Force);
     }
 
     private void OnDrawGizmos()

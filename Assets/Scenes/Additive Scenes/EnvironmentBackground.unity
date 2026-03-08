@@ -308,11 +308,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 931220664502234519, guid: a2385ce4fc53d6e4895d8f625cb18c8e,
         type: 3}
-      propertyPath: m_RootOrder
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 931220664502234519, guid: a2385ce4fc53d6e4895d8f625cb18c8e,
-        type: 3}
       propertyPath: m_LocalScale.x
       value: 8.383175
       objectReference: {fileID: 0}
@@ -881,7 +876,7 @@ MonoBehaviour:
   _injectionPoint: 500
   _injectionPointOffset: 0
   _inputRequirements: 5
-  _cameraType: -1
+  _cameraType: 29
 --- !u!1 &1163876099
 GameObject:
   m_ObjectHideFlags: 0

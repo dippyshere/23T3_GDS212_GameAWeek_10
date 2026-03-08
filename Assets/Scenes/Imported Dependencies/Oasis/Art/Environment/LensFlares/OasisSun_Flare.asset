@@ -638,7 +638,7 @@ MonoBehaviour:
     noiseSpeed: 0
     shapeCutOffSpeed: 0
     shapeCutOffRadius: 10
-    m_LocalIntensity: 5
+    m_LocalIntensity: 3
     lensFlareTexture: {fileID: 2800000, guid: fc0e248a658684c3e8fe68d5931552b9, type: 3}
     uniformScale: 12.33
     sizeXY: {x: 1, y: 1}
