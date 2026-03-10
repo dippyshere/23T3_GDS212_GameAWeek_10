@@ -41,7 +41,7 @@ Shader "Custom/Snow Interactive NoTess"
     {
         Tags
         {
-            "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"
+            "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "TerrainCompatible" = "True"
         }
 
         HLSLINCLUDE
@@ -61,13 +61,53 @@ Shader "Custom/Snow Interactive NoTess"
         float _NoiseScale, _SnowHeight, _NoiseWeight, _SnowDepth;
         float _Tess, _MaxTessDistance;
 
+        #if defined(UNITY_INSTANCING_ENABLED) && defined(_TERRAIN_INSTANCED_PERPIXEL_NORMAL)
+        #define ENABLE_TERRAIN_PERPIXEL_NORMAL
+        #endif
+
+        #ifdef UNITY_INSTANCING_ENABLED
+        CBUFFER_START(_Terrain)
+        float4 _TerrainHeightmapRecipSize;
+        float4 _TerrainHeightmapScale;
+        CBUFFER_END
+
+        TEXTURE2D(_TerrainHeightmapTexture);
+        TEXTURE2D(_TerrainNormalmapTexture);
+
+        UNITY_INSTANCING_BUFFER_START(Terrain)
+        UNITY_DEFINE_INSTANCED_PROP(float4, _TerrainPatchInstanceData)
+        UNITY_INSTANCING_BUFFER_END(Terrain)
+        #endif
+
+        void TerrainInstancing(inout float4 positionOS, inout float3 normalOS, inout float2 uv)
+        {
+        #ifdef UNITY_INSTANCING_ENABLED
+            float2 patchVertex = positionOS.xy;
+            float4 instanceData = UNITY_ACCESS_INSTANCED_PROP(Terrain, _TerrainPatchInstanceData);
+            float2 sampleCoords = (patchVertex + instanceData.xy) * instanceData.z;
+
+            float height = UnpackHeightmap(_TerrainHeightmapTexture.Load(int3(sampleCoords, 0)));
+
+            positionOS.xz = sampleCoords * _TerrainHeightmapScale.xz;
+            positionOS.y = height * _TerrainHeightmapScale.y;
+
+            #ifdef ENABLE_TERRAIN_PERPIXEL_NORMAL
+            normalOS = float3(0, 1, 0);
+            #else
+            normalOS = _TerrainNormalmapTexture.Load(int3(sampleCoords, 0)).rgb * 2 - 1;
+            #endif
+
+            uv = sampleCoords * _TerrainHeightmapRecipSize.zw;
+        #endif
+        }
+
         struct Attributes
         {
             float4 vertex : POSITION;
             float3 normal : NORMAL;
             float2 uv : TEXCOORD0;
             float2 staticLightmapUV : TEXCOORD1;
-            float4 tangent : TANGENT;
+            UNITY_VERTEX_INPUT_INSTANCE_ID
         };
 
         struct Varyings
@@ -78,16 +118,19 @@ Shader "Custom/Snow Interactive NoTess"
             float3 normal : TEXCOORD2;
             float3 viewDir : TEXCOORD3;
             float fogFactor : TEXCOORD4;
-            float3 tangent : TEXCOORD5;
-            float3 bitangent : TEXCOORD6;
             float2 staticLightmapUV : TEXCOORD7;
+            UNITY_VERTEX_INPUT_INSTANCE_ID
         };
 
         Varyings SnowVert(Attributes input)
         {
             Varyings output = (Varyings)0;
+            UNITY_SETUP_INSTANCE_ID(input);
+            UNITY_TRANSFER_INSTANCE_ID(input, output);
 
-            float3 worldPosition = mul(unity_ObjectToWorld, input.vertex).xyz;
+            TerrainInstancing(input.vertex, input.normal, input.uv);
+
+            float3 worldPosition = TransformObjectToWorld(input.vertex.xyz);
 
             // create local uv for effect RT
             float2 uv = worldPosition.xz - _Position.xz;
@@ -109,25 +152,28 @@ Shader "Custom/Snow Interactive NoTess"
             // transform to clip space
             #ifdef SHADERPASS_SHADOWCASTER
             float3 positionWS = TransformObjectToWorld(input.vertex.xyz);
-            float3 normalWS = input.normal;
+            float3 normalWS = TransformObjectToWorldNormal(input.normal);
             #if _CASTING_PUNCTUAL_LIGHT_SHADOW
             float3 lightDirectionWS = normalize(_LightPosition - positionWS);
             #else
             float3 lightDirectionWS = _LightDirection;
             #endif
-            output.positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, 1));
+            output.positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, lightDirectionWS));
             output.positionCS = ApplyShadowClamping(output.positionCS);
             #else
             output.positionCS = TransformObjectToHClip(input.vertex.xyz);
             #endif
 
-            output.worldPos = mul(unity_ObjectToWorld, input.vertex).xyz;
+            output.worldPos = TransformObjectToWorld(input.vertex.xyz);
             output.viewDir = SafeNormalize(GetCameraPositionWS() - output.worldPos);
-            output.normal = input.normal;
-            output.tangent = input.tangent.xyz;
-            output.bitangent = cross(input.tangent.xyz, output.normal);
+            output.normal = TransformObjectToWorldNormal(input.normal);
             output.uv = input.uv;
+            // Terrain instancing generates terrain-space UV in input.uv, which is the correct source for LM sampling.
+            #if defined(UNITY_INSTANCING_ENABLED)
+            output.staticLightmapUV = input.uv * unity_LightmapST.xy + unity_LightmapST.zw;
+            #else
             output.staticLightmapUV = input.staticLightmapUV * unity_LightmapST.xy + unity_LightmapST.zw;
+            #endif
             output.fogFactor = ComputeFogFactor(output.positionCS.z);
             return output;
         }
@@ -138,23 +184,26 @@ Shader "Custom/Snow Interactive NoTess"
         {
             Tags
             {
-                "LightMode" = "UniversalForward"
+                "LightMode" = "UniversalForward" "TerrainCompatible" = "True"
             }
 
             HLSLPROGRAM
             #pragma vertex SnowVert
             #pragma fragment frag
             #pragma target 3.0
-            #pragma instancing_options renderinglayer
+            #pragma multi_compile_instancing
+            #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap
 
             #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile _ _SHADOWS_SOFT
             #pragma multi_compile_fog
             #pragma multi_compile _ LIGHTMAP_ON
+            #pragma multi_compile_fragment _ LIGHTMAP_BICUBIC_SAMPLING
             #pragma multi_compile _ DIRLIGHTMAP_COMBINED
             #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
             #pragma multi_compile _ SHADOWS_SHADOWMASK
+            #pragma shader_feature_local _TERRAIN_INSTANCED_PERPIXEL_NORMAL
 
             sampler2D _MainTex, _SparkleNoise;
             float4 _Color, _RimColor;
@@ -251,8 +300,11 @@ Shader "Custom/Snow Interactive NoTess"
             #pragma vertex SnowVert
             #pragma fragment fragShadow
             #pragma target 3.0
+            #pragma multi_compile_instancing
+            #pragma instancing_options assumeuniformscaling
+            #pragma shader_feature_local _TERRAIN_INSTANCED_PERPIXEL_NORMAL
+            #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
             #pragma multi_compile_shadowcaster
-
             half4 fragShadow(Varyings IN) : SV_Target
             {
                 return 0;
@@ -275,6 +327,9 @@ Shader "Custom/Snow Interactive NoTess"
             #pragma vertex SnowVert
             #pragma fragment fragDepth
             #pragma target 3.0
+            #pragma multi_compile_instancing
+            #pragma instancing_options assumeuniformscaling
+            #pragma shader_feature_local _TERRAIN_INSTANCED_PERPIXEL_NORMAL
 
             half4 fragDepth(Varyings IN) : SV_Target
             {
@@ -297,6 +352,9 @@ Shader "Custom/Snow Interactive NoTess"
             #pragma vertex SnowVert
             #pragma fragment fragDepthNormals
             #pragma target 3.0
+            #pragma multi_compile_instancing
+            #pragma instancing_options assumeuniformscaling
+            #pragma shader_feature_local _TERRAIN_INSTANCED_PERPIXEL_NORMAL
 
             half4 fragDepthNormals(Varyings IN) : SV_Target
             {

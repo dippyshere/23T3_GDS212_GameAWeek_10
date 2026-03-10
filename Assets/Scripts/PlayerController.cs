@@ -10,6 +10,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance { get; private set; }
     static readonly int Grounded = Animator.StringToHash("Grounded");
     static readonly int Jump = Animator.StringToHash("Jump");
     static readonly int Attack1 = Animator.StringToHash("Attack");
@@ -65,6 +66,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Button convenienceGemButton;
     [SerializeField] private GameObject interactionUI;
     [SerializeField] private GameObject deathUI;
+    [SerializeField] private Animator deathUIAnimator;
     [SerializeField] private TextMeshProUGUI deathGold;
 
     private float groundCheckRadius = 0.3f;
@@ -96,6 +98,18 @@ public class PlayerController : MonoBehaviour
     InputAction attackAction;
     InputAction menuAction;
     InputAction interactAction;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     void Start()
     {
@@ -271,6 +285,14 @@ public class PlayerController : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(viewDir);
         orientation.rotation = targetRotation;
         moveDirection = orientation.forward * moveAction.ReadValue<Vector2>().y + orientation.right * moveAction.ReadValue<Vector2>().x;
+        if (Physics.Raycast(transform.position, moveDirection.normalized, out RaycastHit hit, 1f, groundMask))
+        {
+            Vector3 slopeAdjustedMoveDirection = Vector3.ProjectOnPlane(moveDirection, hit.normal);
+            if (Mathf.Abs(Vector3.SignedAngle(moveDirection, slopeAdjustedMoveDirection, Vector3.up)) < 50f)
+            {
+                moveDirection = slopeAdjustedMoveDirection;
+            }
+        }
         rigidBody.AddForce(moveDirection.normalized * (speed * 10f), ForceMode.Force);
     }
 
@@ -279,14 +301,48 @@ public class PlayerController : MonoBehaviour
         bool isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
         Gizmos.color = isGrounded ? Color.green : Color.red;
         Gizmos.DrawSphere(groundCheck.position, groundCheckRadius);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Vector3 forward = transform.forward;
+        Vector3 rightBoundary = Quaternion.Euler(0, 30, 0) * forward;
+        Vector3 leftBoundary = Quaternion.Euler(0, -30, 0) * forward;
+        Gizmos.DrawRay(transform.position, rightBoundary * attackRange);
+        Gizmos.DrawRay(transform.position, leftBoundary * attackRange);
+
+        Gizmos.color = Color.blue;
+        Vector3 viewDir = transform.position - Camera.main.transform.position;
+        viewDir.y = 0;
+        Quaternion targetRotation = Quaternion.LookRotation(viewDir);
+        if (moveAction == null)
+            return;
+        Vector3 moveDirection = targetRotation * (moveAction.ReadValue<Vector2>().y * Vector3.forward + moveAction.ReadValue<Vector2>().x * Vector3.right);
+        Gizmos.DrawRay(transform.position, moveDirection.normalized * 1f);
+        if (Physics.Raycast(transform.position, moveDirection.normalized, out RaycastHit hit, 1f, groundMask))
+        {
+            Vector3 slopeAdjustedMoveDirection = Vector3.ProjectOnPlane(moveDirection, hit.normal);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(transform.position, slopeAdjustedMoveDirection.normalized * 1f);
+        }
     }
 
     private void Attack()
     {
-        Collider[] hitEnemies = Physics.OverlapSphere(transform.position, attackRange, LayerMask.GetMask("Enemy"));
-        foreach (Collider enemy in hitEnemies)
+        Collider[] results = new Collider[6];
+        int size = Physics.OverlapSphereNonAlloc(transform.position, attackRange, results, LayerMask.GetMask("Enemy"));
+        for (int i = 0; i < size; i++)
         {
-            enemy.GetComponent<EnemyController>().TakeDamage(attackDamage);
+            Collider collider = results[i];
+            if (!(Vector3.Dot(transform.forward, (collider.transform.position - transform.position).normalized) > 0.5f))
+            {
+                continue;
+            }
+
+            collider.GetComponent<EnemyController>().TakeDamage(attackDamage);
+            if (Vector3.Dot(collider.transform.forward, (collider.transform.position - transform.position).normalized) < -0.5f)
+            {
+                collider.GetComponent<EnemyController>().TakeDamage(attackDamage);
+            }
         }
     }
 
@@ -309,7 +365,7 @@ public class PlayerController : MonoBehaviour
             PlayerPrefs.SetFloat("gold", gold);
             deathUI.SetActive(true);
             deathGold.text = gold.ToString(CultureInfo.InvariantCulture);
-            deathUI.GetComponent<Animator>().SetBool(Death, true);
+            deathUIAnimator.SetBool(Death, true);
             Invoke(nameof(ReloadScene), 2.1f);
         }
         else

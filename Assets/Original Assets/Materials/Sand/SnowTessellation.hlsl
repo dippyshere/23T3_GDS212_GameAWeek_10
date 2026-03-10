@@ -23,9 +23,8 @@ struct Varyings2
     float2 uv : TEXCOORD0;
     float3 viewDir : TEXCOORD3;
     float fogFactor : TEXCOORD4;
-    float3 tangent : TEXCOORD2; // tangent.x, bitangent.x, normal.x
-    float3 bitangent : TEXCOORD5; // tangent.x, bitangent.x, normal.x
     float2 staticLightmapUV : TEXCOORD6;
+    UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
 float _Tess;
@@ -43,7 +42,7 @@ struct Attributes2
     float3 normal : NORMAL;
     float2 uv : TEXCOORD0;
     float2 staticLightmapUV : TEXCOORD1;
-    float4 tangent : TANGENT;
+    UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
 struct ControlPoint
@@ -52,7 +51,7 @@ struct ControlPoint
     float2 uv : TEXCOORD0;
     float2 staticLightmapUV : TEXCOORD1;
     float3 normal : NORMAL;
-    float4 tangent : TANGENT;
+    UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
 [UNITY_domain("tri")]
@@ -77,7 +76,7 @@ TessellationFactors UnityCalcTriEdgeTessFactors(float3 triVertexFactors)
 
 float CalcDistanceTessFactor(float4 vertex, float minDist, float maxDist, float tess)
 {
-    float3 worldPosition = mul(unity_ObjectToWorld, vertex).xyz;
+    float3 worldPosition = mul(UNITY_MATRIX_M, vertex).xyz;
     float dist = distance(worldPosition, _WorldSpaceCameraPos);
     float f = clamp(1.0 - (dist - minDist) / maxDist, 0, 1.0);
     return f * tess + 1;
@@ -100,8 +99,49 @@ uniform float _OrthographicCamSize;
 sampler2D _Noise;
 float _NoiseScale, _SnowHeight, _NoiseWeight, _SnowDepth;
 
+#if defined(UNITY_INSTANCING_ENABLED) && defined(_TERRAIN_INSTANCED_PERPIXEL_NORMAL)
+#define ENABLE_TERRAIN_PERPIXEL_NORMAL
+#endif
+
+#ifdef UNITY_INSTANCING_ENABLED
+CBUFFER_START(_Terrain)
+float4 _TerrainHeightmapRecipSize;
+float4 _TerrainHeightmapScale;
+CBUFFER_END
+
+TEXTURE2D(_TerrainHeightmapTexture);
+TEXTURE2D(_TerrainNormalmapTexture);
+
+UNITY_INSTANCING_BUFFER_START(Terrain)
+UNITY_DEFINE_INSTANCED_PROP(float4, _TerrainPatchInstanceData)
+UNITY_INSTANCING_BUFFER_END(Terrain)
+#endif
+
+void TerrainInstancing(inout float4 positionOS, inout float3 normalOS, inout float2 uv)
+{
+#ifdef UNITY_INSTANCING_ENABLED
+    float2 patchVertex = positionOS.xy;
+    float4 instanceData = UNITY_ACCESS_INSTANCED_PROP(Terrain, _TerrainPatchInstanceData);
+    float2 sampleCoords = (patchVertex + instanceData.xy) * instanceData.z;
+
+    float height = UnpackHeightmap(_TerrainHeightmapTexture.Load(int3(sampleCoords, 0)));
+
+    positionOS.xz = sampleCoords * _TerrainHeightmapScale.xz;
+    positionOS.y = height * _TerrainHeightmapScale.y;
+
+    #ifdef ENABLE_TERRAIN_PERPIXEL_NORMAL
+    normalOS = float3(0, 1, 0);
+    #else
+    normalOS = _TerrainNormalmapTexture.Load(int3(sampleCoords, 0)).rgb * 2 - 1;
+    #endif
+
+    uv = sampleCoords * _TerrainHeightmapRecipSize.zw;
+#endif
+}
+
 TessellationFactors patchConstantFunction(InputPatch<ControlPoint, 3> patch)
 {
+    UNITY_SETUP_INSTANCE_ID(patch[0]);
     float minDist = 2.0;
     float maxDist = _MaxTessDistance;
     TessellationFactors f;
@@ -111,7 +151,7 @@ TessellationFactors patchConstantFunction(InputPatch<ControlPoint, 3> patch)
 float4 GetShadowPositionHClip2(Attributes2 input)
 {
     float3 positionWS = TransformObjectToWorld(input.vertex.xyz);
-    float3 normalWS = (input.normal);
+    float3 normalWS = TransformObjectToWorldNormal(input.normal);
 
     #if _CASTING_PUNCTUAL_LIGHT_SHADOW
     float3 lightDirectionWS = normalize(_LightPosition - positionWS);
@@ -119,7 +159,7 @@ float4 GetShadowPositionHClip2(Attributes2 input)
     float3 lightDirectionWS = _LightDirection;
     #endif
 
-    float4 positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, 1));
+    float4 positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, lightDirectionWS));
     positionCS = ApplyShadowClamping(positionCS);
     return positionCS;
 }
@@ -128,8 +168,10 @@ float4 GetShadowPositionHClip2(Attributes2 input)
 Varyings2 vert(Attributes2 input)
 {
     Varyings2 output;
+    UNITY_SETUP_INSTANCE_ID(input);
+    UNITY_TRANSFER_INSTANCE_ID(input, output);
 
-    float3 worldPosition = mul(unity_ObjectToWorld, input.vertex).xyz;
+    float3 worldPosition = TransformObjectToWorld(input.vertex.xyz);
     //create local uv
     float2 uv = worldPosition.xz - _Position.xz;
     uv = uv / (_OrthographicCamSize * 2);
@@ -151,19 +193,22 @@ Varyings2 vert(Attributes2 input)
 
     // transform to clip space
     #ifdef SHADERPASS_SHADOWCASTER
-    output.vertex = GetShadowPositionHClip(input);
+    output.vertex = GetShadowPositionHClip2(input);
     #else
     output.vertex = TransformObjectToHClip(input.vertex.xyz);
     #endif
 
     //outputs
-    output.worldPos = mul(unity_ObjectToWorld, input.vertex).xyz;
+    output.worldPos = TransformObjectToWorld(input.vertex.xyz);
     output.viewDir = SafeNormalize(GetCameraPositionWS() - output.worldPos);
-    output.normal = input.normal;
-    output.tangent = input.tangent;
-    output.bitangent = cross(input.tangent, output.normal);
+    output.normal = TransformObjectToWorldNormal(input.normal);
     output.uv = input.uv;
+    // Terrain instancing generates terrain-space UV in input.uv, which is the correct source for LM sampling.
+    #if defined(UNITY_INSTANCING_ENABLED)
+    output.staticLightmapUV = input.uv * unity_LightmapST.xy + unity_LightmapST.zw;
+    #else
     output.staticLightmapUV = input.staticLightmapUV * unity_LightmapST.xy + unity_LightmapST.zw;
+    #endif
     output.fogFactor = ComputeFogFactor(output.vertex.z);
     return output;
 }
@@ -183,7 +228,7 @@ Varyings2 domain(TessellationFactors factors, OutputPatch<ControlPoint, 3> patch
     Interpolate(uv)
     Interpolate(staticLightmapUV)
     Interpolate(normal)
-    Interpolate(tangent)
 
+    UNITY_TRANSFER_INSTANCE_ID(patch[0], v);
     return vert(v);
 }

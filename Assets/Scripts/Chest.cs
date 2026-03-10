@@ -69,29 +69,21 @@ public class Chest : MonoBehaviour
         //    }
         //}
         // temp code until interactable gems are added
-        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject t in gameObjects)
+        int randomGemType = Random.Range(0, 3);
+        switch (randomGemType)
         {
-            if (t.GetComponent<PlayerController>())
-            {
-                GameObject player = t;
-                int randomGemType = Random.Range(0, 3);
-                switch (randomGemType)
-                {
-                    case 0:
-                        player.GetComponent<PlayerController>().AddGems(PlayerController.GemTradeType.Stone1);
-                        break;
-                    case 1:
-                        player.GetComponent<PlayerController>().AddGems(PlayerController.GemTradeType.Stone2);
-                        break;
-                    case 2:
-                        player.GetComponent<PlayerController>().AddGems(PlayerController.GemTradeType.Stone5);
-                        break;
-                    default:
-                        player.GetComponent<PlayerController>().AddGems(PlayerController.GemTradeType.Stone6);
-                        break;
-                }
-            }
+            case 0:
+                PlayerController.Instance.AddGems(PlayerController.GemTradeType.Stone1);
+                break;
+            case 1:
+                PlayerController.Instance.AddGems(PlayerController.GemTradeType.Stone2);
+                break;
+            case 2:
+                PlayerController.Instance.AddGems(PlayerController.GemTradeType.Stone5);
+                break;
+            default:
+                PlayerController.Instance.AddGems(PlayerController.GemTradeType.Stone6);
+                break;
         }
     }
 }

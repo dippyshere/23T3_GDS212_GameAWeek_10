@@ -17,47 +17,17 @@ public class MusicManager : MonoBehaviour
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.loop = true;
 
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-
-        if (player != null)
-        {
-            for (int i = 0; i < settlementBoundaries.Length; i++)
-            {
-                Collider settlementCollider = settlementBoundaries[i].GetComponent<Collider>();
-                if (!settlementCollider.bounds.Contains(player.transform.position))
-                {
-                    continue;
-                }
-
-                currentTrackIndex = i;
-                SetMusicTrackForPlayer();
-                return;
-            }
-        }
-
-        SetDefaultMusicTrack();
-    }
-
-    private void Update()
-    {
-        CheckPlayerPosition();
+        InvokeRepeating(nameof(CheckPlayerPosition), 0f, 1f);
     }
 
     private void CheckPlayerPosition()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-
-        if (!player)
-        {
-            return;
-        }
-
         bool nearSettlement = false;
 
         for (int i = 0; i < settlementBoundaries.Length; i++)
         {
             Collider settlementCollider = settlementBoundaries[i].GetComponent<Collider>();
-            if (!settlementCollider.bounds.Contains(player.transform.position))
+            if (!settlementCollider.bounds.Contains(PlayerController.Instance.transform.position))
             {
                 continue;
             }

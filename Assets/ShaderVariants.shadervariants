@@ -16,17 +16,17 @@ ShaderVariantCollection:
   - first: {fileID: 4800000, guid: 9656abcda5a8ad24dbe96a77774e3f68, type: 3}
     second:
       variants:
+      - keywords: INSTANCING_ON SHADOWS_DEPTH
+        passType: 8
       - keywords: SHADOWS_DEPTH
         passType: 8
-      - keywords: LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS
+      - keywords: INSTANCING_ON LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING
+          SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS
         passType: 13
-      - keywords: LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS_CASCADE
-          _SHADOWS_SOFT
+      - keywords: INSTANCING_ON LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING
+          SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT
         passType: 13
-      - keywords: LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS
-        passType: 13
-      - keywords: LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS_CASCADE
-          _SHADOWS_SOFT
+      - keywords: LIGHTMAP_BICUBIC_SAMPLING _MAIN_LIGHT_SHADOWS
         passType: 13
   - first: {fileID: 66, guid: 0000000000000000f000000000000000, type: 0}
     second:
@@ -43,6 +43,13 @@ ShaderVariantCollection:
       variants:
       - keywords: 
         passType: 0
+  - first: {fileID: 10490, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 13
+      - keywords: INSTANCING_ON
+        passType: 13
   - first: {fileID: 9000, guid: 0000000000000000f000000000000000, type: 0}
     second:
       variants:
@@ -83,6 +90,16 @@ ShaderVariantCollection:
       variants:
       - keywords: 
         passType: 0
+  - first: {fileID: 18002, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 19011, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
   - first: {fileID: 4800000, guid: d6dae50ee9e1bfa4db75f19f99355220, type: 3}
     second:
       variants:
@@ -108,11 +125,6 @@ ShaderVariantCollection:
       - keywords: 
         passType: 0
       - keywords: _HIGH_QUALITY_SAMPLING
-        passType: 0
-  - first: {fileID: 4800000, guid: 2aed67ad60045d54ba3a00c91e2d2631, type: 3}
-    second:
-      variants:
-      - keywords: _USE_FAST_SRGB_LINEAR_CONVERSION
         passType: 0
   - first: {fileID: 4800000, guid: 5f1864addb451f54bae8c86d230f736e, type: 3}
     second:
@@ -144,19 +156,18 @@ ShaderVariantCollection:
       - keywords: INSTANCING_ON
         passType: 8
       - keywords: LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK
-          _ADDITIONAL_LIGHTS_VERTEX _EMISSION _MAIN_LIGHT_SHADOWS _SPECULAR_SETUP
-        passType: 13
-      - keywords: LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK
-          _ADDITIONAL_LIGHTS_VERTEX _EMISSION _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT
-          _SPECULAR_SETUP
-        passType: 13
-      - keywords: LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK
           _ADDITIONAL_LIGHTS_VERTEX _MAIN_LIGHT_SHADOWS _RECEIVE_SHADOWS_OFF _SPECULAR_SETUP
           _SURFACE_TYPE_TRANSPARENT
         passType: 13
       - keywords: LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK
+          _ADDITIONAL_LIGHTS_VERTEX _MAIN_LIGHT_SHADOWS _SPECULAR_SETUP
+        passType: 13
+      - keywords: LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK
           _ADDITIONAL_LIGHTS_VERTEX _MAIN_LIGHT_SHADOWS_CASCADE _RECEIVE_SHADOWS_OFF
           _SHADOWS_SOFT _SPECULAR_SETUP _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+      - keywords: LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK
+          _ADDITIONAL_LIGHTS_VERTEX _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT _SPECULAR_SETUP
         passType: 13
       - keywords: LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK
           _ADDITIONAL_LIGHTS_VERTEX _MAIN_LIGHT_SHADOWS
@@ -165,13 +176,7 @@ ShaderVariantCollection:
           _ADDITIONAL_LIGHTS_VERTEX _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT
         passType: 13
       - keywords: LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX
-          _MAIN_LIGHT_SHADOWS
-        passType: 13
-      - keywords: LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX
           _MAIN_LIGHT_SHADOWS _RECEIVE_SHADOWS_OFF
-        passType: 13
-      - keywords: LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX
-          _MAIN_LIGHT_SHADOWS
         passType: 13
   - first: {fileID: 4800000, guid: 0406db5a14f94604a8c57ccfbc9f3b46, type: 3}
     second:
@@ -184,10 +189,7 @@ ShaderVariantCollection:
       variants:
       - keywords: 
         passType: 13
-      - keywords: _ADDITIONAL_LIGHTS_VERTEX _DECAL_NORMAL_BLEND_LOW _MAIN_LIGHT_SHADOWS
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS_VERTEX _DECAL_NORMAL_BLEND_LOW _MAIN_LIGHT_SHADOWS_CASCADE
-          _SHADOWS_SOFT
+      - keywords: INSTANCING_ON _DECAL_LAYERS
         passType: 13
   - first: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
     second:
@@ -241,9 +243,6 @@ ShaderVariantCollection:
       - keywords: LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX
           _MAIN_LIGHT_SHADOWS
         passType: 13
-      - keywords: LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX
-          _MAIN_LIGHT_SHADOWS _NORMALMAP
-        passType: 13
       - keywords: LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX
           _MAIN_LIGHT_SHADOWS
         passType: 13
@@ -263,15 +262,23 @@ ShaderVariantCollection:
   - first: {fileID: 4800000, guid: 4ff0c054e3c19e647bf5047f6e241564, type: 3}
     second:
       variants:
+      - keywords: INSTANCING_ON SHADOWS_DEPTH
+        passType: 8
       - keywords: SHADOWS_DEPTH
         passType: 8
-      - keywords: LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS
+      - keywords: INSTANCING_ON LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING
+          SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT
         passType: 13
-      - keywords: LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS_CASCADE
-          _SHADOWS_SOFT
+      - keywords: LIGHTMAP_BICUBIC_SAMPLING _MAIN_LIGHT_SHADOWS
         passType: 13
-      - keywords: LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS
+  - first: {fileID: -6465566751694194690, guid: 56ce20daaee9f7d4980101c4e66bac46,
+      type: 3}
+    second:
+      variants:
+      - keywords: 
         passType: 13
-      - keywords: LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS_CASCADE
-          _SHADOWS_SOFT
+      - keywords: INSTANCING_ON
+        passType: 13
+      - keywords: INSTANCING_ON _ADDITIONAL_LIGHTS_VERTEX _DECAL_NORMAL_BLEND_LOW
+          _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT
         passType: 13

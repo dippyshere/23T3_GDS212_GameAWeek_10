@@ -46,12 +46,15 @@ Shader "Custom/Snow Interactive"
 
     ControlPoint TessellationVertexProgram(Attributes2 v)
     {
+        UNITY_SETUP_INSTANCE_ID(v);
+        TerrainInstancing(v.vertex, v.normal, v.uv);
+
         ControlPoint p;
         p.vertex = v.vertex;
         p.uv = v.uv;
         p.staticLightmapUV = v.staticLightmapUV;
         p.normal = v.normal;
-        p.tangent = v.tangent;
+        UNITY_TRANSFER_INSTANCE_ID(v, p);
         return p;
     }
     ENDHLSL
@@ -60,7 +63,7 @@ Shader "Custom/Snow Interactive"
     {
         Tags
         {
-            "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"
+            "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "TerrainCompatible" = "True"
         }
 
         Pass
@@ -78,7 +81,8 @@ Shader "Custom/Snow Interactive"
             #pragma require tessellation tessHW
             #pragma fragment frag
             #pragma target 4.0
-            #pragma instancing_options renderinglayer
+            #pragma multi_compile_instancing
+            #pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap
 
             // Lightmap keywords
             #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
@@ -86,9 +90,11 @@ Shader "Custom/Snow Interactive"
             #pragma multi_compile _ _SHADOWS_SOFT
             #pragma multi_compile_fog
             #pragma multi_compile _ LIGHTMAP_ON
+            #pragma multi_compile_fragment _ LIGHTMAP_BICUBIC_SAMPLING
             #pragma multi_compile _ DIRLIGHTMAP_COMBINED
             #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
             #pragma multi_compile _ SHADOWS_SHADOWMASK
+            #pragma shader_feature_local _TERRAIN_INSTANCED_PERPIXEL_NORMAL
 
             sampler2D _MainTex, _SparkleNoise;
             float4 _Color, _RimColor;
@@ -102,7 +108,6 @@ Shader "Custom/Snow Interactive"
             half4 frag(Varyings2 IN) : SV_Target
             {
                 // Effects RenderTexture Reading
-                float3 worldPosition = mul(unity_ObjectToWorld, IN.vertex).xyz;
                 float2 uv = IN.worldPos.xz - _Position.xz;
                 uv /= _OrthographicCamSize * 2;
                 uv += 0.5;
@@ -187,6 +192,10 @@ Shader "Custom/Snow Interactive"
             #pragma hull hull
             #pragma domain domain
             #pragma target 3.0
+            #pragma multi_compile_instancing
+            #pragma instancing_options assumeuniformscaling
+            #pragma shader_feature_local _TERRAIN_INSTANCED_PERPIXEL_NORMAL
+            #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
             #pragma multi_compile_shadowcaster
             #pragma fragment frag
 
@@ -215,7 +224,9 @@ Shader "Custom/Snow Interactive"
             #pragma target 4.0
             #pragma domain domain
             #pragma fragment fragDepthOnly
-
+            #pragma multi_compile_instancing
+            #pragma instancing_options assumeuniformscaling
+            #pragma shader_feature_local _TERRAIN_INSTANCED_PERPIXEL_NORMAL
             half4 fragDepthOnly(Varyings2 IN) : SV_Target
             {
                 return 0;
@@ -240,7 +251,9 @@ Shader "Custom/Snow Interactive"
             #pragma target 4.0
             #pragma domain domain
             #pragma fragment fragDepthNormals
-
+            #pragma multi_compile_instancing
+            #pragma instancing_options assumeuniformscaling
+            #pragma shader_feature_local _TERRAIN_INSTANCED_PERPIXEL_NORMAL
             half4 fragDepthNormals(Varyings2 IN) : SV_Target
             {
                 float3 normalWS = normalize(IN.normal);

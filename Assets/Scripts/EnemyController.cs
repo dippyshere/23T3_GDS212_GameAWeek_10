@@ -95,10 +95,10 @@ public class EnemyController : MonoBehaviour
 
     private void Attack()
     {
-        Collider[] hitPlayers = Physics.OverlapSphere(attackPoint.position, attackRange, LayerMask.GetMask("Player"));
-        foreach (Collider player in hitPlayers)
+        if (Vector3.Distance(attackPoint.position, player.transform.position) <= attackRange &&
+            Vector3.Dot(transform.forward, (player.transform.position - transform.position).normalized) > 0.5f)
         {
-            player.GetComponent<PlayerController>().TakeDamage(attackDamage);
+            PlayerController.Instance.TakeDamage(attackDamage);
         }
     }
 
@@ -106,6 +106,9 @@ public class EnemyController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+
+        Vector3 forward = transform.forward * attackRange;
+        Gizmos.DrawLine(attackPoint.position, attackPoint.position + forward);
     }
 
     private void OnTriggerEnter(Collider other)
