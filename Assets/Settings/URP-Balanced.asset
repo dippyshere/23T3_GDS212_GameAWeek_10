@@ -52,9 +52,9 @@ MonoBehaviour:
   m_AdditionalLightsShadowResolutionTierLow: 128
   m_AdditionalLightsShadowResolutionTierMedium: 256
   m_AdditionalLightsShadowResolutionTierHigh: 512
-  m_ReflectionProbeBlending: 0
-  m_ReflectionProbeBoxProjection: 0
-  m_ReflectionProbeAtlas: 0
+  m_ReflectionProbeBlending: 1
+  m_ReflectionProbeBoxProjection: 1
+  m_ReflectionProbeAtlas: 1
   m_ShadowDistance: 65
   m_ShadowCascadeCount: 2
   m_Cascade2Split: 0.15384616
@@ -134,8 +134,8 @@ MonoBehaviour:
   m_PrefilterUseLegacyLightmaps: 0
   m_PrefilterBicubicLightmapSampling: 0
   m_PrefilterReflectionProbeRotation: 1
-  m_PrefilterReflectionProbeBlending: 1
-  m_PrefilterReflectionProbeBoxProjection: 1
+  m_PrefilterReflectionProbeBlending: 0
+  m_PrefilterReflectionProbeBoxProjection: 0
   m_PrefilterReflectionProbeAtlas: 1
   m_ShaderVariantLogLevel: 0
   m_ShadowCascades: 0

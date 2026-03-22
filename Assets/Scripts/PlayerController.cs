@@ -492,14 +492,14 @@ public class PlayerController : MonoBehaviour
         gems = gemInventory.Count;
         healthBar.fillAmount = health / 100f;
         waterBar.fillAmount = water / 100f;
-        goldBar.fillAmount = gold / 500f;
+        goldBar.fillAmount = gold / 50f;
         goldText.text = gold + " Gold";
         gemsText.text = gems + " Gems";
         foreach (TextMeshProUGUI waterText in waterTexts)
         {
             waterText.text = (int)water + "% Water";
         }
-        goldGoalText.text = gold + " / 500 Gold Goal";
+        goldGoalText.text = gold + " / 50 Gold Goal";
         conveienceGoldWaterText.text = WaterReplenishCost(true) + " Gold";
         conveienceGoldGemText.text = TradeGemsValue(true) + " Gold";
         convenienceGemText.text = gems + " Gems";

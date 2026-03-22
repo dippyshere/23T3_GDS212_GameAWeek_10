@@ -259,6 +259,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -1305,6 +1306,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -1709,7 +1711,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: c407f15c8ef8ccd45a084710f13b894f, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 16c233f0e9bb0b24dae234c01629c91a, type: 2}
 --- !u!4 &1233471248
 Transform:
   m_ObjectHideFlags: 0
@@ -1902,7 +1904,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: Go forth! Get yourself to Miastoleken and join the fight against Prydain!
-    500 gold will get you there.
+    50 gold will get you there.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e6cbd2ef731425042a3387a1cd4bfcb3, type: 2}
   m_sharedMaterial: {fileID: -2937656449856118890, guid: e6cbd2ef731425042a3387a1cd4bfcb3,
