@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4875989786881212}
   - component: {fileID: 8222145693016800036}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Stone_0 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ LODGroup:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1671618741653090}
-  serializedVersion: 2
+  serializedVersion: 3
   m_LocalReferencePoint: {x: 0, y: 0, z: 0}
   m_Size: 1
   m_FadeMode: 1
@@ -52,6 +52,7 @@ LODGroup:
     renderers:
     - renderer: {fileID: 142970394415821285}
   m_Enabled: 1
+  m_GlobalIlluminationLOD: 0
 --- !u!1 &5971906538711752150
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +64,7 @@ GameObject:
   - component: {fileID: 268952240573103238}
   - component: {fileID: 1845418533078090024}
   - component: {fileID: 142970394415821285}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Stone_0 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

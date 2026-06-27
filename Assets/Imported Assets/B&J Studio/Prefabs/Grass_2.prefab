@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4207819397778118}
   - component: {fileID: 7491489940142000509}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Grass_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ LODGroup:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1418582842427950}
-  serializedVersion: 2
+  serializedVersion: 3
   m_LocalReferencePoint: {x: 0, y: 0, z: 0}
   m_Size: 1
   m_FadeMode: 1
@@ -52,6 +52,7 @@ LODGroup:
     renderers:
     - renderer: {fileID: 954348766676853519}
   m_Enabled: 1
+  m_GlobalIlluminationLOD: 0
 --- !u!1 &3433569645127408665
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +64,7 @@ GameObject:
   - component: {fileID: 100010188709390477}
   - component: {fileID: 513546527683325425}
   - component: {fileID: 954348766676853519}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Grass_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

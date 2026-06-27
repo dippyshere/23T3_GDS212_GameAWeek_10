@@ -68,20 +68,7 @@ MonoBehaviour:
       - rid: 7537732783516155916
       - rid: 7537733233606656000
     m_RuntimeSettings:
-      m_List:
-      - rid: 4246764925310730419
-      - rid: 4246764925310730420
-      - rid: 4246764925310730422
-      - rid: 4246764925310730423
-      - rid: 4246764925310730426
-      - rid: 4246764925310730428
-      - rid: 4246764925310730436
-      - rid: 4246764925310730437
-      - rid: 4246764925310730438
-      - rid: 7537732783516155905
-      - rid: 7537732783516155911
-      - rid: 7537732783516155914
-      - rid: 7537732783516155916
+      m_List: []
   m_AssetVersion: 10
   m_ObsoleteDefaultVolumeProfile: {fileID: 0}
   m_RenderingLayerNames:
@@ -248,6 +235,8 @@ MonoBehaviour:
         asm: Unity.RenderPipelines.Universal.Runtime}
       data:
         m_DefaultMaterial: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d,
+          type: 2}
+        m_SimpleLitMaterial: {fileID: 2100000, guid: 6a1143ee683302f4aa628c052723efc1,
           type: 2}
         m_DefaultParticleMaterial: {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d,
           type: 2}
@@ -549,6 +538,13 @@ MonoBehaviour:
         asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_version: 0
+        m_PanelSettings: {fileID: 11400000, guid: fa69697be3070b04a893666f5947f18c,
+          type: 2}
+        m_StyleSheets:
+        - {fileID: 7433441132597879392, guid: 0ff99fd36f66f1a41bcc1d3c90e0922a, type: 3}
+        - {fileID: 7433441132597879392, guid: 3a8aa4d508da46d4dace18b280f064aa, type: 3}
+        m_VisualTreeAsset: {fileID: 9197481963319205126, guid: b647ceb1e15264943b9b439971e71110,
+          type: 3}
     - rid: 7537732783516155916
       type: {class: LightmapSamplingSettings, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:

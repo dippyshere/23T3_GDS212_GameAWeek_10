@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &-8876612453565075032
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -44,7 +44,7 @@ MonoBehaviour:
       cameraFieldOfView: 60
 --- !u!114 &-1983262502651289832
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -65,7 +65,7 @@ MonoBehaviour:
       normalBlend: 0
 --- !u!114 &-1878332245247344467
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -120,15 +120,14 @@ MonoBehaviour:
   - {fileID: -1983262502651289832}
   - {fileID: -8876612453565075032}
   m_RendererFeatureMap: adc0de57c6d2eee5181f1ef942097ae4a8f171f800f0cf84
-  m_UseNativeRenderPass: 1
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   m_AssetVersion: 3
   m_PrepassLayerMask:
     serializedVersion: 2
-    m_Bits: 937
+    m_Bits: 941
   m_OpaqueLayerMask:
     serializedVersion: 2
-    m_Bits: 937
+    m_Bits: 941
   m_TransparentLayerMask:
     serializedVersion: 2
     m_Bits: 937
@@ -147,3 +146,4 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 0
+  m_TileOnlyMode: 0

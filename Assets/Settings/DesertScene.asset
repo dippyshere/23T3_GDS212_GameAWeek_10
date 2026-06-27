@@ -70,7 +70,7 @@ MonoBehaviour:
     m_Value: {x: 0, y: 50}
   Tint:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 0.34117648, b: 0.019607844, a: 1}
+    m_Value: {r: 1.4525654, g: 0.34983253, b: 0, a: 1}
   SunScatteringIntensity:
     m_OverrideState: 1
     m_Value: 3
