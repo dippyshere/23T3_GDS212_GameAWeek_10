@@ -22,7 +22,7 @@ public class Chest : MonoBehaviour
     }
 
     [SerializeField]
-    private GameObject lidObject; // Reference to the lid object
+    private GameObject[] lidObjects; // Reference to the lid object
 
     private bool isOpen = false;
 
@@ -53,9 +53,12 @@ public class Chest : MonoBehaviour
         //Instantiate(weightedGem.gemPrefab, transform.position, Quaternion.identity);
 
         // Deactivate the lid object
-        if (lidObject != null)
+        foreach (GameObject lid in lidObjects)
         {
-            lidObject.SetActive(false);
+            if (lid)
+            {
+                lid.SetActive(false);
+            }
         }
 
         // Mark the chest as open
