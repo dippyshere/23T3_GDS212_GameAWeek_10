@@ -72,21 +72,7 @@ MonoBehaviour:
       - rid: 6005203320804999173
       - rid: 6005203320804999174
     m_RuntimeSettings:
-      m_List:
-      - rid: 4246764925310730419
-      - rid: 4246764925310730420
-      - rid: 4246764925310730422
-      - rid: 4246764925310730423
-      - rid: 4246764925310730428
-      - rid: 4246764925310730436
-      - rid: 4246764925310730437
-      - rid: 4246764925310730438
-      - rid: 7537732783516155905
-      - rid: 7537732783516155911
-      - rid: 7537732783516155914
-      - rid: 7537732783516155916
-      - rid: 6005203320804999173
-      - rid: 6005203320804999174
+      m_List: []
   m_AssetVersion: 11
   m_ObsoleteDefaultVolumeProfile: {fileID: 0}
   m_RenderingLayerNames:
@@ -161,6 +147,7 @@ MonoBehaviour:
         m_DebugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
         m_HdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
         m_ProbeVolumeSamplingDebugComputeShader: {fileID: 7200000, guid: 53626a513ea68ce47b59dc1299fe3959, type: 3}
+        m_BatchingTypeDebugPS: {fileID: 4800000, guid: b7ae02663a8f4b48b2b31fc48f7acfbe, type: 3}
     - rid: 4246764925310730428
       type: {class: UniversalRenderPipelineRuntimeTextures, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.Runtime}
       data:

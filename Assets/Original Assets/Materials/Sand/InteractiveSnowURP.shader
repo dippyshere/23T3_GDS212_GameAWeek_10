@@ -152,7 +152,9 @@ Shader "Custom/Snow Interactive"
 
                 #if _MAIN_LIGHT_SHADOWS_CASCADE || _MAIN_LIGHT_SHADOWS || _MAIN_LIGHT_SHADOWS_SCREEN
                 Light mainLight = GetMainLight(shadowCoord, IN.worldPos, shadowMask);
-                shadow = mainLight.shadowAttenuation;
+                shadow = mainLight.shadowAttenuation - 0.1;
+                real3 cookieColor = SampleMainLightCookie(IN.worldPos);
+                shadow *= cookieColor;
                 #else
                 Light mainLight = GetMainLight();
                 #endif

@@ -13,6 +13,8 @@ public class EnvironmentSceneManagement : MonoBehaviour
     [SerializeField, Tooltip("The name of the main scene")] private string mainSceneName = "MainScene";
 
     public CinemachineCamera introCam;
+    public CinemachineOrbitalFollow gameplayCam;
+    public CinemachineInputAxisController gameplayCamInput;
     public Animator transitionAnimator;
 
     private void Awake()
@@ -40,5 +42,15 @@ public class EnvironmentSceneManagement : MonoBehaviour
 
         transitionAnimator.SetTrigger(FadeOut);
         introCam.enabled = false;
+        gameplayCamInput.enabled = false;
+        gameplayCam.HorizontalAxis.Recentering.Enabled = true;
+        gameplayCam.VerticalAxis.Recentering.Enabled = true;
+        gameplayCam.HorizontalAxis.TriggerRecentering();
+        gameplayCam.VerticalAxis.TriggerRecentering();
+
+        yield return new WaitForSeconds(1f);
+        gameplayCamInput.enabled = true;
+        gameplayCam.HorizontalAxis.Recentering.Enabled = false;
+        gameplayCam.VerticalAxis.Recentering.Enabled = false;
     }
 }
