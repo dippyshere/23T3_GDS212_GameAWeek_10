@@ -20,7 +20,9 @@ public class PlayerController : MonoBehaviour
     static readonly int WalkSpeedMult = Animator.StringToHash("WalkSpeedMult");
     static readonly int Die = Animator.StringToHash("Die");
     static readonly int Death = Animator.StringToHash("Death");
-    static readonly int Damage = Animator.StringToHash("TakeDamage");
+    static readonly int Hide = Animator.StringToHash("HideHUD");
+    static readonly int Damage = Animator.StringToHash("Hit");
+    static readonly int FadeIn = Animator.StringToHash("FadeIn");
 
     [Header("Configuration")]
     [SerializeField] private LayerMask groundMask;
@@ -67,7 +69,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject interactionUI;
     [SerializeField] private GameObject deathUI;
     [SerializeField] private Animator deathUIAnimator;
+    [SerializeField] private Animator HUDAnimator;
     [SerializeField] private TextMeshProUGUI deathGold;
+    [SerializeField] private Animator transitionAnimator;
+    [SerializeField] CinemachineCamera introCam;
 
     private float groundCheckRadius = 0.3f;
     private float speed = 8;
@@ -366,13 +371,22 @@ public class PlayerController : MonoBehaviour
             deathUI.SetActive(true);
             deathGold.text = gold.ToString(CultureInfo.InvariantCulture);
             deathUIAnimator.SetBool(Death, true);
-            Invoke(nameof(ReloadScene), 2.1f);
+            HUDAnimator.SetBool(Hide, true);
+            Invoke(nameof(SetDeathGold), 1.933f);
+            Invoke(nameof(ReloadScene), 3.84f);
         }
         else
         {
             animator.SetBool(Damage, true);
             Debug.Log("Player health: " + health);
         }
+    }
+
+    private void SetDeathGold()
+    {
+        deathGold.text = 0.ToString(CultureInfo.InvariantCulture);
+        introCam.enabled = true;
+        transitionAnimator.SetBool(FadeIn, true);
     }
 
     private void ReloadScene()
