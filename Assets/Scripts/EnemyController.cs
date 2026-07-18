@@ -25,6 +25,7 @@ public class EnemyController : MonoBehaviour
     private GameObject player;
     private float nextAttackTime = 0f;
     private float nextDamageTime = 0f;
+    bool isDead = false;
 
     Camera _mainCamera;
 
@@ -41,7 +42,7 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
         animator.SetBool(Property, !(agent.remainingDistance <= agent.stoppingDistance));
-        if (!player)
+        if (!player || isDead)
         {
             return;
         }
@@ -79,6 +80,7 @@ public class EnemyController : MonoBehaviour
         {
             animator.SetTrigger(Die);
             Destroy(gameObject, 1.3f);
+            isDead = true;
             // move trail particle systems to separate game object to prevent it from being destroyed
             ParticleSystem[] particleSystems = GetComponentsInChildren<ParticleSystem>();
             foreach (ParticleSystem particleSystem in particleSystems)

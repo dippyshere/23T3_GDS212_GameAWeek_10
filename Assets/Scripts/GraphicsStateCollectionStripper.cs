@@ -1,14 +1,16 @@
 using System.Collections.Generic;
 using System.IO;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
-
+#endif
 
 // This script is used to make sure build contains only the GraphicsStateCollections files that matches with build target platform,
 // by moving the unwanted collections to a temp folder before build and restoring them after build.
 // i.e. A Windows build will not contain any OSX GraphicsStateCollections etc.
+#if UNITY_EDITOR
 class GraphicsStateCollectionStripper : IPreprocessBuildWithReport, IPostprocessBuildWithReport
 {
     struct StrippedFile
@@ -91,3 +93,4 @@ class GraphicsStateCollectionStripper : IPreprocessBuildWithReport, IPostprocess
         }
     }
 }
+#endif

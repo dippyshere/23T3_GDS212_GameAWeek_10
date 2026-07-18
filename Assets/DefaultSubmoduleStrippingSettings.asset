@@ -16,6 +16,7 @@ MonoBehaviour:
   RemoveEmbeddedDebugSymbols: 0
   MissingSubmoduleErrorHandling: 0
   SubmodulesToStrip:
+  - 2D Rendering Common
   - 2D Rendering Sprite Tiling
   - Advanced Text Generator Support
   - Animation Constraints
@@ -28,17 +29,16 @@ MonoBehaviour:
   - Freetype2 Postscript
   - Freetype2 SFNT
   - Freetype2 TrueType
-  - HierarchyCore Script Bindings
-  - libjpeg
+  - HierarchyCore
   - libpng
   - libtess2
-  - Mesh Async Upload
-  - Mesh Combiner
-  - Mesh Optimizer
+  - Mesh Blend Shapes
   - Mono Globalization
   - Mono Runtime
-  - ParticleSystem Gradients
   - ParticleSystem Sub Emitters Module
+  - ParticleSystem Script Bindings
+  - Box2D v2
+  - Physics2D Core
   - Physics2D Script Bindings
   - PhysX Vehicle
   - System.ComponentModel Extra
@@ -55,7 +55,7 @@ MonoBehaviour:
   - TextCoreTextEngine
   - Texture Decompression BC
   - Texture Decompression ETC
-  - Tilemap
+  - Tilemap Core
   - UI Toolkit TextEditingManipulator
   - UI Toolkit TextSelectingManipulator
   - UI Toolkit Base Fields

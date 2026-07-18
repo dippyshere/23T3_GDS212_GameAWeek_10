@@ -6,22 +6,35 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.Cinemachine;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance { get; private set; }
+    [NoAutoStaticsCleanup]
     static readonly int Grounded = Animator.StringToHash("Grounded");
+    [NoAutoStaticsCleanup]
     static readonly int Jump = Animator.StringToHash("Jump");
+    [NoAutoStaticsCleanup]
     static readonly int Attack1 = Animator.StringToHash("Attack");
+    [NoAutoStaticsCleanup]
     static readonly int Run = Animator.StringToHash("Run");
+    [NoAutoStaticsCleanup]
     static readonly int Walk = Animator.StringToHash("Walk");
+    [NoAutoStaticsCleanup]
     static readonly int RunSpeedMult = Animator.StringToHash("RunSpeedMult");
+    [NoAutoStaticsCleanup]
     static readonly int WalkSpeedMult = Animator.StringToHash("WalkSpeedMult");
+    [NoAutoStaticsCleanup]
     static readonly int Die = Animator.StringToHash("Die");
+    [NoAutoStaticsCleanup]
     static readonly int Death = Animator.StringToHash("Death");
+    [NoAutoStaticsCleanup]
     static readonly int Hide = Animator.StringToHash("HideHUD");
+    [NoAutoStaticsCleanup]
     static readonly int Damage = Animator.StringToHash("Hit");
+    [NoAutoStaticsCleanup]
     static readonly int FadeIn = Animator.StringToHash("FadeIn");
 
     [Header("Configuration")]
@@ -104,16 +117,20 @@ public class PlayerController : MonoBehaviour
     InputAction menuAction;
     InputAction interactAction;
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void ResetStatics()
+    {
+        Instance = null;
+    }
+
     void Awake()
     {
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-        }
+        Instance = this;
     }
 
     void Start()
@@ -372,8 +389,8 @@ public class PlayerController : MonoBehaviour
             deathGold.text = gold.ToString(CultureInfo.InvariantCulture);
             deathUIAnimator.SetBool(Death, true);
             HUDAnimator.SetBool(Hide, true);
-            Invoke(nameof(SetDeathGold), 1.933f);
-            Invoke(nameof(ReloadScene), 3.84f);
+            Invoke(nameof(SetDeathGold), 2.933f);
+            Invoke(nameof(ReloadScene), 4.84f);
         }
         else
         {
