@@ -15,6 +15,9 @@ public class IntroTextPrinter : MonoBehaviour
 
     IEnumerator Start()
     {
+        yield return null;
+        yield return null;
+        yield return null;
         fullText = textComponent.text;
         textComponent.text = "";
         yield return new WaitForSeconds(startDelay);

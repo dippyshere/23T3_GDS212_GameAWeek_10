@@ -36,6 +36,10 @@ public class PlayerController : MonoBehaviour
     static readonly int Damage = Animator.StringToHash("Hit");
     [NoAutoStaticsCleanup]
     static readonly int FadeIn = Animator.StringToHash("FadeIn");
+    [NoAutoStaticsCleanup]
+    static readonly int Pickup = Animator.StringToHash("Pickup");
+    [NoAutoStaticsCleanup]
+    static readonly int WinFade = Animator.StringToHash("WinFade");
 
     [Header("Configuration")]
     [SerializeField] private LayerMask groundMask;
@@ -75,6 +79,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject replenishUI;
     [SerializeField] private GameObject convenienceUI;
     [SerializeField] private GameObject inventoryUI;
+    [SerializeField] GameObject winDialogue;
+    [SerializeField] GameObject payDialogue;
     [SerializeField] private Button tradeGemButton;
     [SerializeField] private Button replenishButton;
     [SerializeField] private Button convenienceWaterButton;
@@ -94,7 +100,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 direction;
     private Vector3 moveDirection = Vector3.left;
     private bool canMove = true;
-    private float nextAttackTime = 0f;
+    public float nextAttackTime = 0f;
     private GameObject interactingChest;
     private GameObject interactingTrade;
     private GameObject interactingWater;
@@ -138,14 +144,6 @@ public class PlayerController : MonoBehaviour
         rigidBody = transform.GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        if (PlayerPrefs.HasKey("gems"))
-        {
-            gems = PlayerPrefs.GetFloat("gems");
-        }
-        if (PlayerPrefs.HasKey("gold"))
-        {
-            gold = PlayerPrefs.GetFloat("gold");
-        }
         _mainCamera = Camera.main;
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
@@ -178,18 +176,26 @@ public class PlayerController : MonoBehaviour
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             animator.SetBool(Jump, true);
         }
-        if (attackAction.WasPressedThisFrame() && canMove)
-        {
-            if (Time.time >= nextAttackTime)
-            {
-                animator.SetBool(Attack1, true);
-                nextAttackTime = Time.time + 1f / attackRate;
-                Attack();
-            }
-        }
         if (canMove)
         {
             visualTransform.rotation = Quaternion.Slerp(visualTransform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * 10f);
+            if (attackAction.IsPressed())
+            {
+                if (Time.time >= nextAttackTime)
+                {
+                    animator.SetBool(Attack1, true);
+                    nextAttackTime = Time.time + 1f / attackRate;
+                    Attack();
+                }
+            }
+            else
+            {
+                animator.SetBool(Attack1, false);
+            }
+        }
+        else
+        {
+            animator.SetBool(Attack1, false);
         }
         if (menuAction.IsPressed() && canMove)
         {
@@ -207,7 +213,7 @@ public class PlayerController : MonoBehaviour
             freeLookCamera.Controllers[0].Enabled = true;
             freeLookCamera.Controllers[1].Enabled = true;
         }
-        if (interactingChest || interactingTrade || interactingWater || interactingConvenience)
+        if (interactingChest || interactingTrade || interactingWater || interactingConvenience || interactingWin)
         {
             interactionUI.SetActive(true);
         }
@@ -221,6 +227,7 @@ public class PlayerController : MonoBehaviour
             {
                 interactingChest.GetComponent<Chest>().OpenChest();
                 interactingChest = null;
+                animator.SetBool(Pickup, true);
             }
             if (interactingTrade)
             {
@@ -237,11 +244,11 @@ public class PlayerController : MonoBehaviour
                 OpenConvenienceUI();
                 interactingConvenience = null;
             }
-            //if (interactingWin != null)
-            //{
-            //    CloseGameAndClearSaved();
-            //    interactingWin = null;
-            //}
+            if (interactingWin)
+            {
+                EndGame();
+                interactingWin = null;
+            }
         }
         UpdateUI();
         interactionUI.transform.LookAt(_mainCamera.transform);
@@ -355,13 +362,13 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < size; i++)
         {
             Collider collider = results[i];
-            if (!(Vector3.Dot(transform.forward, (collider.transform.position - transform.position).normalized) > 0.5f))
+            if (!(Vector3.Dot(visualTransform.forward, (collider.transform.position - visualTransform.position).normalized) > 0.5f))
             {
                 continue;
             }
 
             collider.GetComponent<EnemyController>().TakeDamage(attackDamage);
-            if (Vector3.Dot(collider.transform.forward, (collider.transform.position - transform.position).normalized) < -0.5f)
+            if (Vector3.Dot(collider.transform.forward, (collider.transform.position - visualTransform.position).normalized) < -0.5f)
             {
                 collider.GetComponent<EnemyController>().TakeDamage(attackDamage);
             }
@@ -383,8 +390,6 @@ public class PlayerController : MonoBehaviour
             Cursor.visible = true;
             freeLookCamera.Controllers[0].Enabled = false;
             freeLookCamera.Controllers[1].Enabled = false;
-            PlayerPrefs.SetFloat("gems", gems);
-            PlayerPrefs.SetFloat("gold", gold);
             deathUI.SetActive(true);
             deathGold.text = gold.ToString(CultureInfo.InvariantCulture);
             deathUIAnimator.SetBool(Death, true);
@@ -395,7 +400,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             animator.SetBool(Damage, true);
-            Debug.Log("Player health: " + health);
         }
     }
 
@@ -463,13 +467,13 @@ public class PlayerController : MonoBehaviour
     {
         if (convenience)
         {
-            int cost = Mathf.RoundToInt(40 - (water / 2.5f));
-            return Mathf.Clamp(cost, 1, 40);
+            int cost = Mathf.RoundToInt(20 - water / 5);
+            return Mathf.Clamp(cost, 1, 20);
         }
         else
         {
-            int cost = Mathf.RoundToInt(20 - (water / 5));
-            return Mathf.Clamp(cost, 1, 20);
+            int cost = Mathf.RoundToInt(10 - water / 10);
+            return Mathf.Clamp(cost, 1, 10);
         }
     }
 
@@ -486,7 +490,6 @@ public class PlayerController : MonoBehaviour
     public void AddGems(GemTradeType gemType)
     {
         gemInventory.Add(gemType);
-        Debug.Log("Added " + gemType);
     }
 
     int TradeGemsValue(bool convenience)
@@ -512,20 +515,38 @@ public class PlayerController : MonoBehaviour
 
     public enum GemTradeType
     {
-        Stone1 = 10,
-        Stone2 = 15,
-        Stone5 = 20,
-        Stone6 = 25,
+        Stone1 = 15,
+        Stone2 = 20,
+        Stone5 = 25,
+        Stone6 = 40,
     }
 
     private void UpdateUI()
     {
-        gems = gemInventory.Count;
+        gems = 0;
+        for (int i = 0; i < gemInventory.Count; i++)
+        {
+            switch (gemInventory[i])
+            {
+                case GemTradeType.Stone1:
+                    gems += 3;
+                    break;
+                case GemTradeType.Stone2:
+                    gems += 4;
+                    break;
+                case GemTradeType.Stone5:
+                    gems += 5;
+                    break;
+                case GemTradeType.Stone6:
+                    gems += 8;
+                    break;
+            }
+        }
         healthBar.fillAmount = health / 100f;
         waterBar.fillAmount = water / 100f;
         goldBar.fillAmount = gold / 50f;
         goldText.text = gold + " Gold";
-        gemsText.text = gems + " Gems";
+        gemsText.text = gems + " Gem" + (Mathf.Approximately(gems, 1) ? "" : "s");
         foreach (TextMeshProUGUI waterText in waterTexts)
         {
             waterText.text = (int)water + "% Water";
@@ -533,9 +554,9 @@ public class PlayerController : MonoBehaviour
         goldGoalText.text = gold + " / 50 Gold Goal";
         conveienceGoldWaterText.text = WaterReplenishCost(true) + " Gold";
         conveienceGoldGemText.text = TradeGemsValue(true) + " Gold";
-        convenienceGemText.text = gems + " Gems";
+        convenienceGemText.text = gems + " Gem" + (Mathf.Approximately(gems, 1) ? "" : "s");
         replenishGoldText.text = WaterReplenishCost(false) + " Gold";
-        tradeGemsText.text = gems + " Gems";
+        tradeGemsText.text = gems + " Gem" + (Mathf.Approximately(gems, 1) ? "" : "s");
         tradeGoldText.text = TradeGemsValue(false) + " Gold";
         tradeGemButton.interactable = gemInventory.Count > 0;
         replenishButton.interactable = water < 100;
@@ -565,6 +586,11 @@ public class PlayerController : MonoBehaviour
 
         gold += value;
         gemInventory.Clear();
+        if (gold >= 50)
+        {
+            winDialogue.SetActive(true);
+            payDialogue.SetActive(false);
+        }
     }
 
     public void CloseUI()
@@ -609,9 +635,21 @@ public class PlayerController : MonoBehaviour
         freeLookCamera.Controllers[1].Enabled = false;
     }
 
-    public void CloseGameAndClearSaved()
+    public void EndGame()
     {
-        PlayerPrefs.DeleteAll();
-        Application.Quit();
+        canMove = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        freeLookCamera.Controllers[0].Enabled = false;
+        freeLookCamera.Controllers[1].Enabled = false;
+        HUDAnimator.SetBool(Hide, true);
+        animator.SetBool(Pickup, true);
+        transitionAnimator.SetBool(WinFade, true);
+        Invoke(nameof(LoadEndScene), 3f);
+    }
+
+    private void LoadEndScene()
+    {
+        SceneManager.LoadScene("EndScene");
     }
 }

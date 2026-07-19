@@ -38,6 +38,8 @@ class GraphicsStateCollectionStripper : IPreprocessBuildWithReport, IPostprocess
                 return runtimePlatform == RuntimePlatform.IPhonePlayer;
             case BuildTarget.Android:
                 return runtimePlatform == RuntimePlatform.Android;
+            case BuildTarget.WebGL:
+                return runtimePlatform == RuntimePlatform.WebGLPlayer;
 
             default: return false;
         }
@@ -81,6 +83,7 @@ class GraphicsStateCollectionStripper : IPreprocessBuildWithReport, IPostprocess
         foreach (StrippedFile sc in m_StrippedFiles)
         {
             File.Move(sc.originalPath, sc.tempPath);
+            Debug.Log($"Moved {sc.originalPath} to {sc.tempPath}");
         }
     }
 

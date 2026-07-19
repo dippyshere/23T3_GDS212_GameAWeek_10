@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -7,11 +8,20 @@ using UnityEngine.UI;
 
 public class IntroController : MonoBehaviour
 {
+    [NoAutoStaticsCleanup]
     static readonly int Out = Animator.StringToHash("FadeOut");
+    [NoAutoStaticsCleanup]
+    static readonly int In = Animator.StringToHash("FadeIn");
     public Animator transitionAnimator;
+    public bool isEnd = false;
 
     void Start()
     {
+        if (isEnd)
+        {
+            transitionAnimator.SetTrigger(In);
+            return;
+        }
         if (Application.isMobilePlatform)
         {
             Application.targetFrameRate = Mathf.CeilToInt((float)Screen.currentResolution.refreshRateRatio.value);

@@ -42,12 +42,16 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
         animator.SetBool(Property, !(agent.remainingDistance <= agent.stoppingDistance));
-        if (!player || isDead)
+        if (isDead)
         {
+            agent.isStopped = true;
             return;
         }
-
-        if (Vector3.Distance(homePosition.position, player.transform.position) <= movementRange)
+        if (!player)
+        {
+            agent.SetDestination(homePosition.position);
+        }
+        else if (Vector3.Distance(homePosition.position, player.transform.position) <= movementRange)
         {
             agent.SetDestination(player.transform.position);
             healthBar.fillAmount = 1 - (health / 100);
@@ -81,6 +85,7 @@ public class EnemyController : MonoBehaviour
             animator.SetTrigger(Die);
             Destroy(gameObject, 1.3f);
             isDead = true;
+            healthBarCanvas.SetActive(false);
             // move trail particle systems to separate game object to prevent it from being destroyed
             ParticleSystem[] particleSystems = GetComponentsInChildren<ParticleSystem>();
             foreach (ParticleSystem particleSystem in particleSystems)
@@ -91,7 +96,6 @@ public class EnemyController : MonoBehaviour
         else
         {
             animator.SetBool(Property2, true);
-            Debug.Log("Enemy health: " + health);
         }
     }
 

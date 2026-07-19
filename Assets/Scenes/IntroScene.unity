@@ -2603,6 +2603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionAnimator: {fileID: 525003571}
+  isEnd: 0
 --- !u!4 &1939861582
 Transform:
   m_ObjectHideFlags: 0

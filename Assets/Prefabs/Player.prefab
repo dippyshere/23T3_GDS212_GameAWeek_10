@@ -111,9 +111,9 @@ MonoBehaviour:
   walkVisualMultiplier: 0.3
   runVisualMultiplier: 0.15
   jumpForce: 50
-  attackDamage: 15
-  attackRange: 2.5
-  attackRate: 1.5
+  attackDamage: 16
+  attackRange: 3.14
+  attackRate: 0.7
   waterDrainRate: 0.17
   waterDrainRateRun: 0.4
   animator: {fileID: 1866566077097251443}
@@ -152,6 +152,7 @@ MonoBehaviour:
   deathGold: {fileID: 0}
   transitionAnimator: {fileID: 0}
   introCam: {fileID: 0}
+  nextAttackTime: 0
   water: 100
   gold: 0
   gems: 0

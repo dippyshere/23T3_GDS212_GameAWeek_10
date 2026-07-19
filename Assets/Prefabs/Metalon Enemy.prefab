@@ -2696,7 +2696,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1505452879192617452}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: 1479372276
   m_Radius: 5.25
   m_Speed: 4
   m_Acceleration: 7
@@ -10592,7 +10592,7 @@ LODGroup:
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 5145011214223684127}
-  - screenRelativeHeight: 0.034292758
+  - screenRelativeHeight: 0.04365916
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 4463045033950660064}

@@ -72,16 +72,20 @@ public class Chest : MonoBehaviour
         //    }
         //}
         // temp code until interactable gems are added
-        int randomGemType = Random.Range(0, 3);
+        int randomGemType = Random.Range(0, 8);
         switch (randomGemType)
         {
             case 0:
+            case 1:
                 PlayerController.Instance.AddGems(PlayerController.GemTradeType.Stone1);
                 break;
-            case 1:
+            case 2:
+            case 3:
+            case 4:
                 PlayerController.Instance.AddGems(PlayerController.GemTradeType.Stone2);
                 break;
-            case 2:
+            case 5:
+            case 6:
                 PlayerController.Instance.AddGems(PlayerController.GemTradeType.Stone5);
                 break;
             default:

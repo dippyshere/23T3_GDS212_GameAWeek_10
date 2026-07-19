@@ -1,9 +1,12 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using System.Collections;
+using Unity.Jobs;
 using UnityEngine;
 
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 // Trace and warm up pipeline state objects (PSOs) in a GraphicsStateCollection object.
 public class GraphicsStateCollectionManager : MonoBehaviour
@@ -11,12 +14,15 @@ public class GraphicsStateCollectionManager : MonoBehaviour
     public enum Mode
     {
         Tracing,
-        WarmUp
+        WarmUp,
+        WarmUpCacheMissTrace
     };
     public Mode mode;
 
     // Create a singleton so Unity uses the script only once across all scenes.
     public static GraphicsStateCollectionManager Instance;
+
+    public Image loadingBar;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     static void ResetStatics()
@@ -86,50 +92,86 @@ public class GraphicsStateCollectionManager : MonoBehaviour
 
     void Start()
     {
-        if (mode == Mode.Tracing)
+        switch (mode)
         {
-            // Find the existing collection file based on current settings.
-            m_GraphicsStateCollection = FindExistingCollection();
+            case Mode.Tracing:
+                // Find the existing collection file based on current settings.
+                m_GraphicsStateCollection = FindExistingCollection();
 
-            if (m_GraphicsStateCollection != null)
-            {
-                // Use the existing file path if found.
-                m_OutputCollectionName = k_CollectionFolderPath + m_GraphicsStateCollection.name;
-            }
-            else
-            {
-                // Create a new file if the file isn't found.
+                if (m_GraphicsStateCollection != null)
+                {
+                    // Use the existing file path if found.
+                    m_OutputCollectionName = k_CollectionFolderPath + m_GraphicsStateCollection.name;
+                }
+                else
+                {
+                    // Create a new file if the file isn't found.
 
-                // Get the name of the current quality level.
-                int qualityLevelIndex = QualitySettings.GetQualityLevel();
-                string qualityLevelName = QualitySettings.names[qualityLevelIndex];
-                qualityLevelName = qualityLevelName.Replace(" ", "");
+                    // Get the name of the current quality level.
+                    int qualityLevelIndex = QualitySettings.GetQualityLevel();
+                    string qualityLevelName = QualitySettings.names[qualityLevelIndex];
+                    qualityLevelName = qualityLevelName.Replace(" ", "");
 
-                // Set up the file path to use for the output collection.
-                m_OutputCollectionName = string.Concat(k_CollectionFolderPath, "GfxState_", Application.platform, "_", SystemInfo.graphicsDeviceType.ToString(), "_", qualityLevelName);
+                    // Set up the file path to use for the output collection.
+                    m_OutputCollectionName = string.Concat(k_CollectionFolderPath, "GfxState_", Application.platform, "_", SystemInfo.graphicsDeviceType.ToString(), "_", qualityLevelName);
 
-                // Create a new GraphicsStateCollection.
-                m_GraphicsStateCollection = new UnityEngine.Rendering.GraphicsStateCollection();
-            }
+                    // Create a new GraphicsStateCollection.
+                    m_GraphicsStateCollection = new UnityEngine.Rendering.GraphicsStateCollection();
+                }
 
-            // Start tracing PSOs.
-            Scene scene = SceneManager.GetActiveScene();
-            Debug.Log("Tracing started for GraphicsStateCollection by Scene '" + scene.name + "'.");
-            m_GraphicsStateCollection.BeginTrace();
+                // Start tracing PSOs.
+                Debug.Log("Tracing started for GraphicsStateCollection'" + m_OutputCollectionName + "'.");
+                m_GraphicsStateCollection.BeginTrace();
+                SceneManager.LoadScene(1);
+                break;
+            case Mode.WarmUp:
+                // Find the existing collection file based on current settings.
+                m_GraphicsStateCollection = FindExistingCollection();
+
+                // Warm up the PSOs.
+                if (m_GraphicsStateCollection != null)
+                {
+                    Debug.Log("Started warming up " + m_GraphicsStateCollection.totalGraphicsStateCount + " GraphicsState entries.");
+                    StartCoroutine(WarmCollectionAsync(m_GraphicsStateCollection));
+                }
+                else
+                {
+                    SceneManager.LoadScene(1);
+                }
+                break;
+            case Mode.WarmUpCacheMissTrace:
+                m_GraphicsStateCollection = FindExistingCollection();
+                if (m_GraphicsStateCollection != null)
+                {
+                    m_OutputCollectionName = k_CollectionFolderPath + m_GraphicsStateCollection.name;
+                    Debug.Log("Started warming up " + m_GraphicsStateCollection.totalGraphicsStateCount + " GraphicsState entries and tracing cache misses.");
+                    StartCoroutine(WarmCollectionAsync(m_GraphicsStateCollection, true));
+                }
+                else
+                {
+                    SceneManager.LoadScene(1);
+                }
+                break;
+            default:
+                SceneManager.LoadScene(1);
+                break;
         }
-        else
+    }
+
+    IEnumerator WarmCollectionAsync(UnityEngine.Rendering.GraphicsStateCollection collection, bool traceMisses = false)
+    {
+        int totalCount = collection.totalGraphicsStateCount > 0 ? collection.totalGraphicsStateCount : collection.variantCount;
+        while (!collection.isWarmedUp)
         {
-            // Find the existing collection file based on current settings.
-            UnityEngine.Rendering.GraphicsStateCollection collection = FindExistingCollection();
-
-            // Warm up the PSOs.
-            if (collection != null)
-            {
-                Scene scene = SceneManager.GetActiveScene();
-                Debug.Log("Scene '" + scene.name + "' started warming up " + collection.totalGraphicsStateCount + " GraphicsState entries.");
-                collection.WarmUp();
-            }
+            float progress = (float)collection.completedWarmupCount / totalCount;
+            loadingBar.fillAmount = progress;
+            yield return null;
+            JobHandle jobHandle = collection.WarmUpProgressively(1, default(JobHandle), traceMisses);
+            yield return new WaitUntil(() => jobHandle.IsCompleted);
         }
+        loadingBar.fillAmount = 1f;
+        Debug.Log("Finished warming up " + totalCount + " GraphicsState entries.");
+        SceneManager.LoadScene(1);
     }
 
     // For mobile platforms, data is additionally saved when focus is lost as OnDestroy() is not guaranteed to be called.
@@ -142,6 +184,11 @@ public class GraphicsStateCollectionManager : MonoBehaviour
                 Debug.Log("Focus changed. Sending collection to Editor with " + m_GraphicsStateCollection.totalGraphicsStateCount + " GraphicsState entries.");
                 m_GraphicsStateCollection.SendToEditor(m_OutputCollectionName);
             }
+            if (mode == Mode.WarmUpCacheMissTrace && m_GraphicsStateCollection != null)
+            {
+                Debug.Log("Focus changed. Sending collection to Editor with " + m_GraphicsStateCollection.cacheMissCollection.totalGraphicsStateCount + " GraphicsState entries.");
+                m_GraphicsStateCollection.cacheMissCollection.SendToEditor(m_OutputCollectionName + "_CacheMisses");
+            }
         }
     }
 
@@ -152,6 +199,11 @@ public class GraphicsStateCollectionManager : MonoBehaviour
             m_GraphicsStateCollection.EndTrace();
             Debug.Log("Sending collection to Editor with " + m_GraphicsStateCollection.totalGraphicsStateCount + " GraphicsState entries.");
             m_GraphicsStateCollection.SendToEditor(m_OutputCollectionName);
+        }
+        if (mode == Mode.WarmUpCacheMissTrace && m_GraphicsStateCollection != null)
+        {
+            Debug.Log("Sending cache miss collection to Editor with " + m_GraphicsStateCollection.cacheMissCollection.totalGraphicsStateCount + " GraphicsState entries.");
+            m_GraphicsStateCollection.cacheMissCollection.SendToEditor(m_OutputCollectionName + "_CacheMisses");
         }
     }
 }

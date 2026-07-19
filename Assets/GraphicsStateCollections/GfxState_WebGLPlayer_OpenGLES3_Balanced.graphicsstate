@@ -1,0 +1,1273 @@
+{
+    "m_Name": "GfxState_WebGLPlayer_OpenGLES3_Balanced",
+    "serializedVersion": "2",
+    "m_Version": 0,
+    "m_DeviceRenderer": 11,
+    "m_RuntimePlatform": 17,
+    "m_QualityLevelName": "Balanced",
+    "m_VariantInfoMap": [
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "1f10c27e5f3cf04fe2cbdf03e9d1e4b9"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Particles/Unlit",
+                "shaderAssetGUID": "0406db5a14f94604a8c57ccfbc9f3b46",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "_SURFACE_TYPE_TRANSPARENT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "37806cd34a01c8703560039c6cc3361d"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/GaussianDepthOfField",
+                "shaderAssetGUID": "5e7134d6e63e0bc47a1dd2669cedb379",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 4,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "59303cb956fd86b312684830050ae683"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/Bloom",
+                "shaderAssetGUID": "5f1864addb451f54bae8c86d230f736e",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 6,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "6350ed77f776c1a195f9e6f8e10e83da"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT _SURFACE_TYPE_TRANSPARENT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "7720de7bef1a2f7379b712a2825d6a06"
+            },
+            "second": {
+                "shaderName": "Hidden/Internal-GUITexture",
+                "shaderAssetGUID": "0860a397848c35f488bf42d3c36a3330",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "c59ed7119894b9f932141beb4a48924c"
+            },
+            "second": {
+                "shaderName": "TextMeshPro/Mobile/Distance Field",
+                "shaderAssetGUID": "fe393ace9b354375a9cb14cdbbc28be4",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "UNDERLAY_ON",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "c560abb1a4b9619981297886d11d5e23"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/GaussianDepthOfField",
+                "shaderAssetGUID": "5e7134d6e63e0bc47a1dd2669cedb379",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 1,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "d8b092778273774101128fcf99226d79"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Lit",
+                "shaderAssetGUID": "933532a4fcc9baf4fa0491de14d08ed7",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _RECEIVE_SHADOWS_OFF _REFLECTION_PROBE_BLENDING _REFLECTION_PROBE_BOX_PROJECTION _SPECULAR_SETUP _SURFACE_TYPE_TRANSPARENT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "2151293d399174137c17d076e1b3446c"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/UberPost",
+                "shaderAssetGUID": "e7857e9d0c934dc4f83f270f8447b006",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "_BLOOM_LQ _DITHERING _TONEMAP_NEUTRAL _USE_FAST_SRGB_LINEAR_CONVERSION",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "27e1ddc4585ba3c01681ae3ac80fd13d"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Lit",
+                "shaderAssetGUID": "933532a4fcc9baf4fa0491de14d08ed7",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _RECEIVE_SHADOWS_OFF _REFLECTION_PROBE_BLENDING _REFLECTION_PROBE_BOX_PROJECTION _SHADOWS_SOFT _SPECULAR_SETUP _SURFACE_TYPE_TRANSPARENT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "500106e85ad4fed83f5d08a4922fc485"
+            },
+            "second": {
+                "shaderName": "Legacy Shaders/Particles/Additive (Soft)",
+                "shaderAssetGUID": "354d607c8d119e4b300074088c7b2b39",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "e80faa166a7a0ad7d7411d46655da915"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/BokehDepthOfField",
+                "shaderAssetGUID": "2aed67ad60045d54ba3a00c91e2d2631",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "_USE_FAST_SRGB_LINEAR_CONVERSION",
+                "subShaderIndex": 0,
+                "passIndex": 3,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "e721acb13c26e1a3e47e6671dbd161f4"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/ScreenSpaceAmbientOcclusion",
+                "shaderAssetGUID": "0849e84e3d62649e8882e9d6f056a017",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "_INTERLEAVED_GRADIENT _SAMPLE_COUNT_LOW _SOURCE_DEPTH_LOW",
+                "subShaderIndex": 0,
+                "passIndex": 5,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "9a224e896baa9c72b33c99b27e3e6261"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal/CoreBlit",
+                "shaderAssetGUID": "93446b5c5339d4f00b85c159e1159b7c",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 1,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "bb7284aa826401d6d7ddb167f491191d"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _RECEIVE_SHADOWS_OFF _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "9ef2a12c4c61153720e8994c79caeb99"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _NORMALMAP _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "21a31bc8b688110f59cb341ede725f67"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "2163a6f508aacac9789ff79b713072ca"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _EMISSION _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _RECEIVE_SHADOWS_OFF _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "d5535679ee7e1d65c2127c7b2e0637ee"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/ScreenSpaceAmbientOcclusion",
+                "shaderAssetGUID": "0849e84e3d62649e8882e9d6f056a017",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "_INTERLEAVED_GRADIENT _SAMPLE_COUNT_LOW _SOURCE_DEPTH_LOW",
+                "subShaderIndex": 0,
+                "passIndex": 7,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "0c547f77bdf17070f7681372f544dfa2"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/GaussianDepthOfField",
+                "shaderAssetGUID": "5e7134d6e63e0bc47a1dd2669cedb379",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 3,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "22148a71175f988d5e9d7c85ad81e991"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES",
+                "subShaderIndex": 0,
+                "passIndex": 1,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "6fe4728146e3cadc3614ffa15f711996"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "92e4022112c031bb52f16d5ee8941fdf"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/CopyDepth",
+                "shaderAssetGUID": "d6dae50ee9e1bfa4db75f19f99355220",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "aeb42f66bada2780439a5743f45dc9e1"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Lit",
+                "shaderAssetGUID": "933532a4fcc9baf4fa0491de14d08ed7",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _REFLECTION_PROBE_BLENDING _REFLECTION_PROBE_BOX_PROJECTION _SHADOWS_SOFT _SPECULAR_SETUP",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "c9b49fd8013e830937911ff3c267802f"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/BokehDepthOfField",
+                "shaderAssetGUID": "2aed67ad60045d54ba3a00c91e2d2631",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "_USE_FAST_SRGB_LINEAR_CONVERSION",
+                "subShaderIndex": 0,
+                "passIndex": 2,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "d634741de0515ceaffa48cede40a17a8"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _NORMALMAP",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "f1d4ad93e2a625cda780dba28bbfbaf1"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/LutBuilderLdr",
+                "shaderAssetGUID": "65df88701913c224d95fc554db28381a",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "7c35695eca6b89f5ca3137e4789a6f68"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "8b95949ac56b1f5451c6242b4c8cd375"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _RECEIVE_SHADOWS_OFF",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "e91561ce158a9588e4493878cb09e7e1"
+            },
+            "second": {
+                "shaderName": "Hidden/BlitCopy",
+                "shaderAssetGUID": "7f98de55a7e99dc4ab9469edbd3040bc",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "4a4676fc8a0c1108a15a121a55247bf5"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Lit",
+                "shaderAssetGUID": "933532a4fcc9baf4fa0491de14d08ed7",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _REFLECTION_PROBE_BLENDING _REFLECTION_PROBE_BOX_PROJECTION _SHADOWS_SOFT _SPECULAR_SETUP",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "a1c6091673a4692c22526fbb2b988ed6"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES",
+                "subShaderIndex": 0,
+                "passIndex": 1,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "d256b08f60506e302d5c94391b2ccdd8"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Lit",
+                "shaderAssetGUID": "933532a4fcc9baf4fa0491de14d08ed7",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _REFLECTION_PROBE_BLENDING _REFLECTION_PROBE_BOX_PROJECTION _SPECULAR_SETUP",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "cde62e824d02deb027f02cf53a4fd73c"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _EMISSION _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _RECEIVE_SHADOWS_OFF _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "144743e7f9118056bfe4ade0ecaf46c9"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT _SPECULAR_COLOR",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "5907d4725be6e6f4a34a6083cd7a3cae"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/BokehDepthOfField",
+                "shaderAssetGUID": "2aed67ad60045d54ba3a00c91e2d2631",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "_USE_FAST_SRGB_LINEAR_CONVERSION",
+                "subShaderIndex": 0,
+                "passIndex": 1,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "54f7d1b5444d49a5eca7679da484468f"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _EMISSION _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _RECEIVE_SHADOWS_OFF",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "6cf793d56d74ac0ed3c3eda462f7b5a6"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "56b773227f29e18fea3bfaf79ef715b5"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/ScreenSpaceAmbientOcclusion",
+                "shaderAssetGUID": "0849e84e3d62649e8882e9d6f056a017",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "_INTERLEAVED_GRADIENT _SAMPLE_COUNT_LOW _SOURCE_DEPTH_LOW",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "7d4726a86a6878c4ce406ad56d929284"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "929700b67a925cbb18847e581b80aa22"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _RECEIVE_SHADOWS_OFF _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "0c48a34b80845457420a1d94bf23bd85"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _RECEIVE_SHADOWS_OFF",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "2168ebaf8c434dcf0e34a900824262d7"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _NORMALMAP",
+                "subShaderIndex": 0,
+                "passIndex": 1,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "3a2879d85609a31b390e92fee0113e04"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT _SURFACE_TYPE_TRANSPARENT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "75282b720079cbf9d8091b515594a1cb"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/BokehDepthOfField",
+                "shaderAssetGUID": "2aed67ad60045d54ba3a00c91e2d2631",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "_USE_FAST_SRGB_LINEAR_CONVERSION",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "74a7d6e01dc62b114ed742e62531891e"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/LensFlareDataDriven",
+                "shaderAssetGUID": "6cda457ac28612740adb23da5d39ea92",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "FLARE_HAS_OCCLUSION FLARE_OPENGL3_OR_OPENGLCORE",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "ff68e3a55fb3d594e46f0807c87ef940"
+            },
+            "second": {
+                "shaderName": "Shader Graphs/PDDecal",
+                "shaderAssetGUID": "56ce20daaee9f7d4980101c4e66bac46",
+                "shaderAssetLocalIdentifierInFile": 0,
+                "keywordNames": "INSTANCING_ON LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _DECAL_NORMAL_BLEND_LOW _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "f587f5406fe68738bbe79addaffa324f"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _NORMALMAP",
+                "subShaderIndex": 0,
+                "passIndex": 1,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "48396bd5faf0ceb2b117fb97f99e9048"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "7cd9f31cf8a625f9535217fb8327ae9f"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _SPECULAR_COLOR",
+                "subShaderIndex": 0,
+                "passIndex": 1,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "45c9ac6a919806bebcbdb82f1d9472f6"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "0d8ae78dd5c5f87e5e3857339763773a"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _SPECULAR_COLOR",
+                "subShaderIndex": 0,
+                "passIndex": 1,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "586a83f2f08a608dd123a1e59c59c3c6"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _SPECULAR_COLOR",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "00bb30debd5d9f43af556199e12cca3b"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _EMISSION _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _RECEIVE_SHADOWS_OFF",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "3fbb48bf775232231f81161f8d0571d2"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/Bloom",
+                "shaderAssetGUID": "5f1864addb451f54bae8c86d230f736e",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 5,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "51fbd08ded645297d6b765c32ff8037c"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Unlit",
+                "shaderAssetGUID": "650dd9526735d5b46b79224bc6e94025",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "746b072107fafb9242002844275f6035"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _NORMALMAP _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "920b9237e51a3c50f1e7e8d3b148b202"
+            },
+            "second": {
+                "shaderName": "UI/Default",
+                "shaderAssetGUID": "203dea5f7870f4649b7b371a655d12b9",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "b1eb25cfc232c346da13014300eccfa5"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Lit",
+                "shaderAssetGUID": "933532a4fcc9baf4fa0491de14d08ed7",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _REFLECTION_PROBE_BLENDING _REFLECTION_PROBE_BOX_PROJECTION _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "c2ab8a594a55baef3d28b837663f215e"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _NORMALMAP",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "f42b83aef75ee246fd22d7c9c398f0ce"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT _SPECULAR_COLOR",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "13cc390bc288f49d421cb905215dc169"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "2cac3a78cc0737b533f579696c8950d0"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "4cdc87056c3de9fc967e60614a5018c3"
+            },
+            "second": {
+                "shaderName": "Custom/Snow Interactive",
+                "shaderAssetGUID": "9656abcda5a8ad24dbe96a77774e3f68",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "INSTANCING_ON LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "357bfbf25bc9c5f412f1206a601c001a"
+            },
+            "second": {
+                "shaderName": "Skybox/Cubemap",
+                "shaderAssetGUID": "3ed86df59d11a651a000969b27cf9b59",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "9afc8a9cfb9886e4ea0adbfd90abccbf"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "9f2c1a8fff64990b36fb120ad2543401"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/GaussianDepthOfField",
+                "shaderAssetGUID": "5e7134d6e63e0bc47a1dd2669cedb379",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "c2ccbe783153c2b8492805baa85803e9"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "2a2b353eb5aa44eed87d9925bcca9d31"
+            },
+            "second": {
+                "shaderName": "Shader Graphs/HeightFog",
+                "shaderAssetGUID": "d10b4840c0c724395b5579f3b7482024",
+                "shaderAssetLocalIdentifierInFile": 0,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "9eed0cf4d3ffb2102d47b52b5bc965eb"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _NORMALMAP _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "befd4ce4ab249ba47184d7b7d529f7b5"
+            },
+            "second": {
+                "shaderName": "Hidden/TerrainEngine/GenerateNormalmap",
+                "shaderAssetGUID": "e628cc4204700e640ad945494df721a2",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "bfadcb0c8a46015ebeb356c49d43fb07"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Lit",
+                "shaderAssetGUID": "933532a4fcc9baf4fa0491de14d08ed7",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _RECEIVE_SHADOWS_OFF _REFLECTION_PROBE_BLENDING _REFLECTION_PROBE_BOX_PROJECTION _SHADOWS_SOFT _SPECULAR_SETUP _SURFACE_TYPE_TRANSPARENT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "ed0d87d1a14197e9d6ef87f0b9182941"
+            },
+            "second": {
+                "shaderName": "Custom/Snow Interactive",
+                "shaderAssetGUID": "9656abcda5a8ad24dbe96a77774e3f68",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "INSTANCING_ON LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _MAIN_LIGHT_SHADOWS",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "2c0e5f44ef149da25121ad8c34d97cbd"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Lit",
+                "shaderAssetGUID": "933532a4fcc9baf4fa0491de14d08ed7",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _RECEIVE_SHADOWS_OFF _REFLECTION_PROBE_BLENDING _REFLECTION_PROBE_BOX_PROJECTION _SPECULAR_SETUP _SURFACE_TYPE_TRANSPARENT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "c6be5b6d540caa80a07bebca451b8584"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/BokehDepthOfField",
+                "shaderAssetGUID": "2aed67ad60045d54ba3a00c91e2d2631",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "_USE_FAST_SRGB_LINEAR_CONVERSION",
+                "subShaderIndex": 0,
+                "passIndex": 4,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "cd3ec7b62309a94f4029c0c8dd67eec7"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/Bloom",
+                "shaderAssetGUID": "5f1864addb451f54bae8c86d230f736e",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "fb8e1cf4fa09472fd9b796b4bd7c3b45"
+            },
+            "second": {
+                "shaderName": "Hidden/Universal Render Pipeline/GaussianDepthOfField",
+                "shaderAssetGUID": "5e7134d6e63e0bc47a1dd2669cedb379",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "",
+                "subShaderIndex": 0,
+                "passIndex": 2,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "c29e52d59559e12f4532352d17a3a694"
+            },
+            "second": {
+                "shaderName": "Shader Graphs/PDDecal",
+                "shaderAssetGUID": "56ce20daaee9f7d4980101c4e66bac46",
+                "shaderAssetLocalIdentifierInFile": 0,
+                "keywordNames": "INSTANCING_ON LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _DECAL_NORMAL_BLEND_LOW _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "401fb1f9749738d14cef2b9cdd62ce53"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Lit",
+                "shaderAssetGUID": "933532a4fcc9baf4fa0491de14d08ed7",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _REFLECTION_PROBE_BLENDING _REFLECTION_PROBE_BOX_PROJECTION",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "1f8ff2ec3d9d8a8fc0d03bb5aaf6b3ba"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Lit",
+                "shaderAssetGUID": "933532a4fcc9baf4fa0491de14d08ed7",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _REFLECTION_PROBE_BLENDING _REFLECTION_PROBE_BOX_PROJECTION _SPECULAR_SETUP",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "c5be09a34ed279678d7ad5b56586cf87"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _ALPHATEST_ON _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "f25ea4afb8d79375848885c65e67876e"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_ON LIGHTMAP_SHADOW_MIXING LOD_FADE_CROSSFADE SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS _NORMALMAP",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "729f25353a2360dbbce8058a0e2f710e"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Simple Lit",
+                "shaderAssetGUID": "8d2bb70cbf9db8d4da26e15b26e74248",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _MAIN_LIGHT_SHADOWS_CASCADE _NORMALMAP _SHADOWS_SOFT",
+                "subShaderIndex": 0,
+                "passIndex": 0,
+                "graphicsStateInfoSet": []
+            }
+        },
+        {
+            "first": {
+                "serializedVersion": "2",
+                "Hash": "f5af8d7316a101add5e3ebd796b667bb"
+            },
+            "second": {
+                "shaderName": "Universal Render Pipeline/Lit",
+                "shaderAssetGUID": "933532a4fcc9baf4fa0491de14d08ed7",
+                "shaderAssetLocalIdentifierInFile": 4800000,
+                "keywordNames": "LIGHTMAP_BICUBIC_SAMPLING LIGHTMAP_SHADOW_MIXING SHADOWS_SHADOWMASK _ADDITIONAL_LIGHTS_VERTEX _LIGHT_COOKIES _REFLECTION_PROBE_BLENDING _REFLECTION_PROBE_BOX_PROJECTION",
+                "subShaderIndex": 0,
+                "passIndex": 1,
+                "graphicsStateInfoSet": []
+            }
+        }
+    ],
+    "m_VertexLayoutInfoMap": [],
+    "m_RenderPassInfoMap": [],
+    "m_RenderStateMap": []
+}
