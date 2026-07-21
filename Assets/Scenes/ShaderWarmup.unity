@@ -163,12 +163,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e2f3de1d1491a64fba438dcce77610d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GraphicsStateCollectionManager
-  mode: 2
+  mode: 1
   loadingBar: {fileID: 1585309371}
+  loadingText: {fileID: 1447770887}
   collections:
+  - {fileID: -6766982352335285333, guid: 70c6e4aa7fcd5bc42b9f00b000d4ff20, type: 3}
+  - {fileID: -6766982352335285333, guid: 7a8f2550538ee1a40a5453b3e7f3ba44, type: 3}
   - {fileID: -6766982352335285333, guid: e08f6c10d6f15fd4b8f2966e4d061925, type: 3}
   - {fileID: -6766982352335285333, guid: dd3076c2db7db74439e63522a06197c5, type: 3}
   - {fileID: -6766982352335285333, guid: e2827f6ad0c2b6943b7d6453aba60fbb, type: 3}
+  - {fileID: -6766982352335285333, guid: 5d0a757e1c7a656488c563e8d388478b, type: 3}
+  - {fileID: -6766982352335285333, guid: cd0072d5a0b325645b64f1efd3bedfd4, type: 3}
 --- !u!1 &1211117345
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,8 +326,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

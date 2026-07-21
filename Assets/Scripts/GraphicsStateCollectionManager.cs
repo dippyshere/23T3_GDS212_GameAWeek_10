@@ -2,6 +2,7 @@
 using UnityEditor;
 #endif
 using System.Collections;
+using TMPro;
 using Unity.Jobs;
 using UnityEngine;
 
@@ -23,6 +24,7 @@ public class GraphicsStateCollectionManager : MonoBehaviour
     public static GraphicsStateCollectionManager Instance;
 
     public Image loadingBar;
+    public TextMeshProUGUI loadingText;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     static void ResetStatics()
@@ -129,7 +131,7 @@ public class GraphicsStateCollectionManager : MonoBehaviour
                 m_GraphicsStateCollection = FindExistingCollection();
 
                 // Warm up the PSOs.
-                if (m_GraphicsStateCollection != null)
+                if (m_GraphicsStateCollection != null && !m_GraphicsStateCollection.isWarmedUp)
                 {
                     Debug.Log("Started warming up " + m_GraphicsStateCollection.totalGraphicsStateCount + " GraphicsState entries.");
                     StartCoroutine(WarmCollectionAsync(m_GraphicsStateCollection));
@@ -141,7 +143,7 @@ public class GraphicsStateCollectionManager : MonoBehaviour
                 break;
             case Mode.WarmUpCacheMissTrace:
                 m_GraphicsStateCollection = FindExistingCollection();
-                if (m_GraphicsStateCollection != null)
+                if (m_GraphicsStateCollection != null && !m_GraphicsStateCollection.isWarmedUp)
                 {
                     m_OutputCollectionName = k_CollectionFolderPath + m_GraphicsStateCollection.name;
                     Debug.Log("Started warming up " + m_GraphicsStateCollection.totalGraphicsStateCount + " GraphicsState entries and tracing cache misses.");
@@ -161,6 +163,7 @@ public class GraphicsStateCollectionManager : MonoBehaviour
     IEnumerator WarmCollectionAsync(UnityEngine.Rendering.GraphicsStateCollection collection, bool traceMisses = false)
     {
         int totalCount = collection.totalGraphicsStateCount > 0 ? collection.totalGraphicsStateCount : collection.variantCount;
+        loadingText.color = new Color(1, 1, 1, 1);
         while (!collection.isWarmedUp)
         {
             float progress = (float)collection.completedWarmupCount / totalCount;
@@ -171,6 +174,16 @@ public class GraphicsStateCollectionManager : MonoBehaviour
         }
         loadingBar.fillAmount = 1f;
         Debug.Log("Finished warming up " + totalCount + " GraphicsState entries.");
+        float fadeStartTime = Time.time;
+        while (Time.time < fadeStartTime + 0.5f)
+        {
+            float fadeProgress = (Time.time - fadeStartTime) / 0.5f;
+            loadingText.color = new Color(1 - fadeProgress, 1 - fadeProgress, 1 - fadeProgress, 1 - fadeProgress);
+            loadingBar.color = new Color(1 - fadeProgress, 1 - fadeProgress, 1 - fadeProgress, 1 - fadeProgress);
+            yield return null;
+        }
+
+        yield return null;
         SceneManager.LoadScene(1);
     }
 
